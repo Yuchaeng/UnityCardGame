@@ -22,9 +22,9 @@ public class Move_Card : MonoBehaviour
 
         nextPosition = goalPosition - myPosition;
 
-        Debug.Log("My Position : " + myPosition);
-        Debug.Log("Goal Position : " + goalPosition);
-        Debug.Log("move Position : " + nextPosition);
+        //Debug.Log("My Position : " + myPosition);
+        //Debug.Log("Goal Position : " + goalPosition);
+        //Debug.Log("move Position : " + nextPosition);
         //Debug.Log("단위벡터 : " + nextPosition.normalized);
         
         //transform.position = nextPosition + myPosition;
@@ -39,7 +39,7 @@ public class Move_Card : MonoBehaviour
         //transform.position = transform.position + nextPosition.normalized * Time.deltaTime;
         //goalPosition - transform.position
 
-        //myRigid.MovePosition(transform.position + nextPosition.normalized * 5 * Time.deltaTime); //안멈춤,,,,?
+        //myRigid.MovePosition(transform.position + nextPosition.normalized * 5 * Time.deltaTime); //미세하기 떨림이 있음
         transform.position = Vector3.MoveTowards(transform.position, goalPosition, 5*Time.deltaTime); //정확하게 저 좌표로 이동하게(시작,도착,속도)
     }
 }
