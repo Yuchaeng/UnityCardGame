@@ -40,6 +40,6 @@ public class Move_Card : MonoBehaviour
         //goalPosition - transform.position
 
         //myRigid.MovePosition(transform.position + nextPosition.normalized * 5 * Time.deltaTime); //미세하기 떨림이 있음
-        transform.position = Vector3.MoveTowards(transform.position, goalPosition, 5*Time.deltaTime); //정확하게 저 좌표로 이동하게(시작,도착,속도)
+        transform.position = Vector3.MoveTowards(transform.position, goalPosition, 10*Time.deltaTime); //정확하게 저 좌표로 이동하게(시작,도착,속도)
     }
 }
