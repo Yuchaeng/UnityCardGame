@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     public Sprite[] mySprites;
 
-    SpriteRenderer[] cardRenderer = new SpriteRenderer[6];
+    SpriteRenderer[] cardRenderer = new SpriteRenderer[5];
 
     List<string> cardList = new List<string>();
     List<int> onlyNum = new List<int>();
@@ -30,12 +32,19 @@ public class GameManager : MonoBehaviour
     int num = 0;
 
     public Text changeText;
-    public Button[] change = new Button[5];
+    public Button changeSet;
+    public GameObject[] change = new GameObject[5];
+
 
     // Start is called before the first frame update
     void Start()
     {
         changeText.text = "게임을 시작합니다.";
+
+        for (int i = 0; i < change.Length; i++)
+        {
+            change[i].SetActive(false);
+        }
 
         for (int i = 0; i < randomIdx.Length; i++)
         {
@@ -57,21 +66,7 @@ public class GameManager : MonoBehaviour
         {
             cardRenderer[i] = card[i].GetComponent<SpriteRenderer>();
             cardRenderer[i].sprite = mySprites[randomIdx[i]];
-            cardList.Add(cardRenderer[i].sprite.name);
         }
-        
-      
-        for (int i = 0; i < cardList.Count; i++)
-        {
-            onlyNum.Add(Convert.ToInt32(cardList[i].Substring(0, 2)));
-            onlyShape.Add(cardList[i].Substring(2, 1));
-
-            Debug.Log(onlyNum[i] + ", " + onlyShape[i]);
-        }
-
-        onlyNum.Sort();
-        onlyShape.Sort();
-
     }
 
     // Update is called once per frame
@@ -81,9 +76,43 @@ public class GameManager : MonoBehaviour
 
     public void changeCard()
     {
-        int idx = UnityEngine.Random.Range(0, card.Length-2);
-        cardRenderer[idx].sprite = mySprites[randomIdx[5]];
-       
+        string ButtonName = EventSystem.current.currentSelectedGameObject.name;
+        
+        switch (int.Parse(ButtonName))
+        {
+            case 0:
+                cardRenderer[0].sprite = mySprites[randomIdx[5]];
+                break;
+            case 1:
+                cardRenderer[1].sprite = mySprites[randomIdx[5]];
+                break;
+            case 2:
+                cardRenderer[2].sprite = mySprites[randomIdx[5]];
+                break;
+            case 3:
+                cardRenderer[3].sprite = mySprites[randomIdx[5]];
+                break;
+            case 4:
+                cardRenderer[4].sprite = mySprites[randomIdx[5]];
+                break;
+            default:
+                break;
+        }
+
+        for (int i = 0; i < change.Length; i++)
+        {
+            change[i].SetActive(false);
+        }
+
+        changeSet.interactable = false;
+    }
+
+    public void setchange()
+    {
+        for (int i = 0; i < change.Length; i++)
+        {
+            change[i].SetActive(true);
+        }
     }
 
     public void Restart()
@@ -93,6 +122,18 @@ public class GameManager : MonoBehaviour
 
     public void Batting()
     {
+        for (int i = 0; i < card.Length - 1; i++)
+        {
+            cardList.Add(cardRenderer[i].sprite.name);
+            onlyNum.Add(Convert.ToInt32(cardList[i].Substring(0, 2)));
+            onlyShape.Add(cardList[i].Substring(2, 1));
+
+            Debug.Log(onlyNum[i] + ", " + onlyShape[i]);
+        }
+
+        onlyNum.Sort();
+        onlyShape.Sort();
+
         int pair = 0;
 
         //플러쉬
@@ -178,9 +219,7 @@ public class GameManager : MonoBehaviour
             changeText.text = "하이카드(족보 완성X)";
         }
 
-        //if (change.interactable)
-        //{
-        //    change.interactable= false;
-        //}
+        changeSet.interactable = false;
+
     }
 }
