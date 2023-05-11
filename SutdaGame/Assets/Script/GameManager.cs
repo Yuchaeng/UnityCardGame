@@ -3,53 +3,72 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class GameManager : MonoBehaviour
 {
     public GameObject[] card;
     public GameObject[] target;
 
     public Sprite[] sprites;
-    SpriteRenderer[] spRenderer = new SpriteRenderer[8];
+    SpriteRenderer[] cardInfo = new SpriteRenderer[8];
+    public int[] randomIndex = new int[8];
 
-    string[] myConcat = new string[4];
+    public List<string> player0 = new List<string>();
+    public List<string> computer1 = new List<string>();
+    public List<string> computer2 = new List<string>();
+    public List<string> computer3 = new List<string>();
+
+    public string[] myConcat = new string[4];
+    public int[] myScore = new int[4];
+
 
     bool isStart = true;
-
-    int num = -1;
-
     float timer = 0;
+    bool isDDaeng = false;
+    bool isGuang = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        //카드 섞기
-        //for (int i = 0; i < sprites.Length; i++)
+        //랜덤으로 카드 주기
+        //시작하면 내 카드는 두장 다 펼치고 컴퓨터1,2,3은 한장만 펼치기
+        //내 카드가 땡인지 몇 끗인지 등 정보 주고 배팅하겠냐고 물어보기
+        //배팅하기 누르면 카드 다 까고 결과 출력
+
+
+        //for (int i = 0; i < randomIndex.Length; i++)
         //{
-        //    Sprite temp;
+        //    int num = -1;
         //    num = UnityEngine.Random.Range(0, sprites.Length);
-        //    temp = sprites[i];
-        //    sprites[i] = sprites[num];
-        //    sprites[num] = temp;
+        //    for (int j = 0; j < i; j++)
+        //    {
+        //        if (randomIndex[j] == num)
+        //        {
+        //            i--;
+        //            break;
+        //        }    
+        //    }
+        //    randomIndex[i] = num;
         //}
-  
+
         for (int i = 0; i < card.Length; i++)
         {
-            spRenderer[i] = card[i].GetComponent<SpriteRenderer>();
-            //spRenderer[i].sprite = sprites[i];
-            //Debug.Log(sprites[i].name);
+            cardInfo[i] = card[i].GetComponent<SpriteRenderer>();
+            //cardInfo[i].sprite = sprites[i];
+           
         }
 
-        spRenderer[0].sprite = sprites[1];
-        spRenderer[1].sprite = sprites[11];
+        //cardInfo[0].sprite = sprites[1];
+        //cardInfo[1].sprite = sprites[11];
 
-        spRenderer[2].sprite = sprites[2];
-        spRenderer[3].sprite = sprites[6];
+        //cardInfo[2].sprite = sprites[2];
+        //cardInfo[3].sprite = sprites[6];
 
-        spRenderer[4].sprite = sprites[8];
-        spRenderer[5].sprite = sprites[19];
+        //cardInfo[4].sprite = sprites[8];
+        //cardInfo[5].sprite = sprites[19];
 
-        spRenderer[6].sprite = sprites[13];
-        spRenderer[7].sprite = sprites[7];
+        //cardInfo[6].sprite = sprites[13];
+        //cardInfo[7].sprite = sprites[7];
 
 
 
@@ -73,11 +92,11 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(MoveCard(card[i], target[i]));
 
-                if (i == 0 || i == 1)
+                if (i == 6 || i == 7)
                     card[i].transform.Rotate(Vector3.back * 270);
-                else if (i == 2 || i == 3)
-                    card[i].transform.Rotate(Vector3.back * 180);
                 else if (i == 4 || i == 5)
+                    card[i].transform.Rotate(Vector3.back * 180);
+                else if (i == 2 || i == 3)
                     card[i].transform.Rotate(Vector3.back * 90);
             }
         }
@@ -86,22 +105,137 @@ public class GameManager : MonoBehaviour
 
     public void Batting()
     {
-        for (int i = 0; i < myConcat.Length; i++)
+        player0.Add(cardInfo[0].sprite.name);
+        player0.Add(cardInfo[1].sprite.name);
+        player0.Sort();
+
+        computer1.Add(cardInfo[2].sprite.name);
+        computer1.Add(cardInfo[3].sprite.name);
+        computer1.Sort();
+
+        computer2.Add(cardInfo[4].sprite.name);
+        computer2.Add(cardInfo[5].sprite.name);
+        computer2.Sort();
+
+        computer3.Add(cardInfo[6].sprite.name);
+        computer3.Add(cardInfo[7].sprite.name);
+        computer3.Sort();
+
+        myConcat[0] = player0[0] + player0[1];
+        myConcat[1] = computer1[0] + computer1[1];
+        myConcat[2] = computer2[0] + computer2[1];
+        myConcat[3] = computer3[0] + computer3[1];
+
+
+        for (int i = 0; i < myScore.Length; i++)
         {
-            myConcat[i] = spRenderer[i * 2].sprite.name + spRenderer[i * 2 + 1].sprite.name;
+            if (jokbo.ContainsKey(myConcat[i]))
+            {
+                myScore[i] = jokbo[myConcat[i]];
+            }
+            else
+            {
+                myScore[i] = CountEndNum(myConcat[i]);
+            }
+        }
+
+        //땡잡이
+        for (int i = 0; i < myScore.Length; i++)
+        {
+            if (myScore[i] >= 200 && myScore[i] <= 280)
+            {
+                isDDaeng = true;
+            }
+        }
+
+        if(isDDaeng)
+        {
+            for (int i = 0; i < myConcat.Length; i++)
+            {
+                if (myConcat[i] == "cg" || myConcat[i] == "cG" || myConcat[i] == "Cg" || myConcat[i] == "CG")
+                {
+                    myScore[i] = 410;
+                }
+            }
+        }       
+
+        //암행어사
+        for (int i = 0; i < myScore.Length; i++)
+        {
+            if (myScore[i] == 500)
+            {
+                isGuang= true;
+            }
+        }
+        if (isGuang)
+        {
+            for (int i = 0; i < myConcat.Length; i++)
+            {
+                if (myConcat[i] == "dg" || myConcat[i] == "dG" || myConcat[i] == "Dg" || myConcat[i] == "DG")
+                {
+                    myScore[i] = 750;
+                }
+            }
+        }
+
+    }
+
+
+    private int CountEndNum(string concat)
+    {
+        int sumOfIndex = 0;
+
+        for (int i = 0; i < concat.Length; i++)
+        {
+            for (int j = 0; j < cardInfo.Length; j++)
+            {
+                if (concat[i].ToString() == cardInfo[j].sprite.name)
+                {
+                    sumOfIndex += j;
+                    break;
+                }
+            }
         }
         
+
+        int endNum = (sumOfIndex + 2) % 10;
+
+        switch (endNum)
+        {
+            case 0:
+                return 10;
+            case 1:
+                return 15;
+            case 2:
+                return 20;
+            case 3:
+                return 25;
+            case 4:
+                return 30;
+            case 5:
+                return 35;
+            case 6:
+                return 40;
+            case 7:
+                return 45;
+            case 8:
+                return 50;
+            case 9:
+                return 55;
+            default:
+                return -1;
+        }
 
     }
 
     
 
-    public void CardRotate()
-    {
-        //card[4].transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
-        //card[5].transform.Rotate(Vector3.back * 90);
+    //public void CardRotate()
+    //{
+    //    card[4].transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+    //    card[5].transform.Rotate(Vector3.back * 90);
 
-    }
+    //}
 
     //coroutine
     //update문처럼/멀티스레드처럼 움직이는 거
@@ -116,7 +250,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("코루틴 종료");
+        //Debug.Log("코루틴 종료");
     }
 
     Dictionary<string, int> jokbo = new Dictionary<string, int>()
