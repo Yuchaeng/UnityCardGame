@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour
@@ -13,19 +17,24 @@ public class GameManager : MonoBehaviour
     SpriteRenderer[] cardInfo = new SpriteRenderer[8];
     public int[] randomIndex = new int[8];
 
-    public List<string> player0 = new List<string>();
-    public List<string> computer1 = new List<string>();
-    public List<string> computer2 = new List<string>();
-    public List<string> computer3 = new List<string>();
+    List<string> player0 = new List<string>();
+    List<string> computer1 = new List<string>();
+    List<string> computer2 = new List<string>();
+    List<string> computer3 = new List<string>();
 
+    List<string> cardList = new List<string>();
     public string[] myConcat = new string[4];
     public int[] myScore = new int[4];
-
+    string[] myJokbo = new string[4];
 
     bool isStart = true;
     float timer = 0;
     bool isDDaeng = false;
     bool isGuang = false;
+
+    public Text infoText, myCardIs, battingMsg, startMsg, result;
+    public Button gameStart, batting, openCard;
+    public Text[] jokboName = new Text[4];
 
     // Start is called before the first frame update
     void Start()
@@ -35,44 +44,20 @@ public class GameManager : MonoBehaviour
         //³» Ä«µå°¡ ¶¯ÀÎÁö ¸î ²ýÀÎÁö µî Á¤º¸ ÁÖ°í ¹èÆÃÇÏ°Ú³Ä°í ¹°¾îº¸±â
         //¹èÆÃÇÏ±â ´©¸£¸é Ä«µå ´Ù ±î°í °á°ú Ãâ·Â
 
+        myCardIs.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        infoText.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        battingMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;     
+        startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        result.GetComponent<UnityEngine.UI.Text>().enabled = false;
 
-        //for (int i = 0; i < randomIndex.Length; i++)
-        //{
-        //    int num = -1;
-        //    num = UnityEngine.Random.Range(0, sprites.Length);
-        //    for (int j = 0; j < i; j++)
-        //    {
-        //        if (randomIndex[j] == num)
-        //        {
-        //            i--;
-        //            break;
-        //        }    
-        //    }
-        //    randomIndex[i] = num;
-        //}
+        batting.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        openCard.GetComponent<UnityEngine.UI.Button>().interactable = false;
 
         for (int i = 0; i < card.Length; i++)
         {
             cardInfo[i] = card[i].GetComponent<SpriteRenderer>();
-            //cardInfo[i].sprite = sprites[i];
-           
+            //cardInfo[i].sprite = sprites[i]; 
         }
-
-        //cardInfo[0].sprite = sprites[1];
-        //cardInfo[1].sprite = sprites[11];
-
-        //cardInfo[2].sprite = sprites[2];
-        //cardInfo[3].sprite = sprites[6];
-
-        //cardInfo[4].sprite = sprites[8];
-        //cardInfo[5].sprite = sprites[19];
-
-        //cardInfo[6].sprite = sprites[13];
-        //cardInfo[7].sprite = sprites[7];
-
-
-
-
 
     }
 
@@ -84,7 +69,61 @@ public class GameManager : MonoBehaviour
 
     public void GameStart()
     {
-        if(isStart)
+        //·£´ý ÀÎµ¦½º »Ì±â
+        for (int i = 0; i < randomIndex.Length; i++)
+        {
+            int num = -1;
+            num = UnityEngine.Random.Range(0, cardInfo.Length);
+            randomIndex[i] = num;
+
+            for (int j = 0; j < i; j++)
+            {
+                if (randomIndex[j] == num)
+                {
+                    randomIndex[i] = -1;
+                    i--;
+                    break;
+                }
+            }
+        }
+
+        //player0.Add(cardInfo[randomIndex[0]].sprite.name);  -> cardInfo¿¡ card.getComponent¹Þ¾Æ¼­ Çß´Âµ¥ ±×·³ Ä«µå µÞ¸é¸¸ µé¾î°¨
+        //Ä«µå ³ª´²ÁÖ±â
+        player0.Add(sprites[randomIndex[0]].name);
+        player0.Add(sprites[randomIndex[1]].name);
+        player0.Sort();
+
+        computer1.Add(sprites[randomIndex[2]].name);
+        computer1.Add(sprites[randomIndex[3]].name);
+        computer1.Sort();
+
+        computer2.Add(sprites[randomIndex[4]].name);
+        computer2.Add(sprites[randomIndex[5]].name);
+        computer2.Sort();
+
+        computer3.Add(sprites[randomIndex[6]].name);
+        computer3.Add(sprites[randomIndex[7]].name);
+        computer3.Sort();
+
+        myConcat[0] = player0[0] + player0[1];
+        myConcat[1] = computer1[0] + computer1[1];
+        myConcat[2] = computer2[0] + computer2[1];
+        myConcat[3] = computer3[0] + computer3[1];
+
+        //Á¡¼ö °è»êÇØ¼­ ÀúÀå
+        for (int i = 0; i < myScore.Length; i++)
+        {
+            if (jokbo.ContainsKey(myConcat[i]))
+            {
+                myScore[i] = jokbo[myConcat[i]];
+            }
+            else
+            {
+                myScore[i] = CountEndNum(myConcat[i]);
+            }
+        }
+
+        if (isStart)
         {
             isStart = false;
 
@@ -100,44 +139,51 @@ public class GameManager : MonoBehaviour
                     card[i].transform.Rotate(Vector3.back * 90);
             }
         }
+        startMsg.text = "Ä«µå¸¦ ¿ÀÇÂÇÏ¼¼¿ä.";
+        startMsg.GetComponent<UnityEngine.UI.Text>().enabled = true;
 
+        openCard.GetComponent<UnityEngine.UI.Button>().interactable = true;
+
+    }
+
+    public void OpenCard()
+    {
+        startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        batting.GetComponent<UnityEngine.UI.Button>().interactable = true;
+
+        cardInfo[0].sprite = sprites[randomIndex[0]];
+        cardInfo[1].sprite = sprites[randomIndex[1]];
+        cardInfo[2].sprite = sprites[randomIndex[2]];
+        cardInfo[4].sprite = sprites[randomIndex[4]];
+        cardInfo[6].sprite = sprites[randomIndex[6]];
+
+        myCardIs.GetComponent<UnityEngine.UI.Text>().enabled = true;
+        infoText.GetComponent<UnityEngine.UI.Text>().enabled = true;
+        battingMsg.GetComponent<UnityEngine.UI.Text>().enabled = true;
+
+        for (int i = 0; i < myJokbo.Length; i++)
+        {
+            if (myConcat[i] == "AC")
+                myJokbo[i] = "13" + jokboNameOfScore[myScore[i]];
+            else if (myConcat[i] == "AH")
+                myJokbo[i] = "18" + jokboNameOfScore[myScore[i]];
+            else if (myConcat[i] == "cg" || myConcat[i] == "cG" || myConcat[i] == "Cg" || myConcat[0] == "CG")
+                myJokbo[i] = "¶¯ÀâÀÌ or " + jokboNameOfScore[myScore[i]];
+            else if (myConcat[i] == "dg" || myConcat[i] == "dG" || myConcat[i] == "Dg" || myConcat[i] == "DG")
+                myJokbo[i] = "¾ÏÇà¾î»ç or " + jokboNameOfScore[myScore[i]];
+            else
+                myJokbo[i] = jokboNameOfScore[myScore[i]];
+        }
+
+        infoText.text = myJokbo[0];
     }
 
     public void Batting()
     {
-        player0.Add(cardInfo[0].sprite.name);
-        player0.Add(cardInfo[1].sprite.name);
-        player0.Sort();
+        cardInfo[3].sprite = sprites[randomIndex[3]];
+        cardInfo[5].sprite = sprites[randomIndex[5]];
+        cardInfo[7].sprite = sprites[randomIndex[7]];
 
-        computer1.Add(cardInfo[2].sprite.name);
-        computer1.Add(cardInfo[3].sprite.name);
-        computer1.Sort();
-
-        computer2.Add(cardInfo[4].sprite.name);
-        computer2.Add(cardInfo[5].sprite.name);
-        computer2.Sort();
-
-        computer3.Add(cardInfo[6].sprite.name);
-        computer3.Add(cardInfo[7].sprite.name);
-        computer3.Sort();
-
-        myConcat[0] = player0[0] + player0[1];
-        myConcat[1] = computer1[0] + computer1[1];
-        myConcat[2] = computer2[0] + computer2[1];
-        myConcat[3] = computer3[0] + computer3[1];
-
-
-        for (int i = 0; i < myScore.Length; i++)
-        {
-            if (jokbo.ContainsKey(myConcat[i]))
-            {
-                myScore[i] = jokbo[myConcat[i]];
-            }
-            else
-            {
-                myScore[i] = CountEndNum(myConcat[i]);
-            }
-        }
 
         //¶¯ÀâÀÌ
         for (int i = 0; i < myScore.Length; i++)
@@ -148,23 +194,24 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(isDDaeng)
+        if (isDDaeng)
         {
             for (int i = 0; i < myConcat.Length; i++)
             {
                 if (myConcat[i] == "cg" || myConcat[i] == "cG" || myConcat[i] == "Cg" || myConcat[i] == "CG")
                 {
                     myScore[i] = 410;
+                    myJokbo[i] += "Áß¿¡¼­ ¶¯ÀâÀÌ¿´½À´Ï´Ù.";
                 }
             }
-        }       
+        }
 
         //¾ÏÇà¾î»ç
         for (int i = 0; i < myScore.Length; i++)
         {
             if (myScore[i] == 500)
             {
-                isGuang= true;
+                isGuang = true;
             }
         }
         if (isGuang)
@@ -174,11 +221,46 @@ public class GameManager : MonoBehaviour
                 if (myConcat[i] == "dg" || myConcat[i] == "dG" || myConcat[i] == "Dg" || myConcat[i] == "DG")
                 {
                     myScore[i] = 750;
+                    myJokbo[i] += "Áß¿¡¼­ ¾ÏÇà¾î»ç¿´½À´Ï´Ù.";
                 }
             }
         }
 
+        //1µî °è»ê
+        int temp = myScore.Max();
+        int index = Array.FindIndex(myScore, element => element == temp);
+        switch (index)
+        {
+            case 0:
+                result.text = $"¡Ú player0 ÀÌ(°¡) {myJokbo[0]}, {myScore[0]}Á¡À¸·Î ÀÌ°å½À´Ï´Ù. ¡Ú";
+                break;
+            case 1:
+                result.text = $"¡Ú computer1 ÀÌ(°¡) {myJokbo[1]}, {myScore[1]}Á¡À¸·Î ÀÌ°å½À´Ï´Ù. ¡Ú";
+                break;
+            case 2:
+                result.text = $"¡Ú computer2 ÀÌ(°¡) {myJokbo[2]}, {myScore[2]}Á¡À¸·Î ÀÌ°å½À´Ï´Ù. ¡Ú";
+                break;
+            case 3:
+                result.text = $"¡Ú computer3 ÀÌ(°¡) {myJokbo[3]}, {myScore[3]}Á¡À¸·Î ÀÌ°å½À´Ï´Ù. ¡Ú";
+                break;
+            default:
+                break;
+        }
+
+        for (int i = 0; i < jokboName.Length; i++)
+        {
+            jokboName[i].text = myJokbo[i];
+        }
+
+        myCardIs.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        infoText.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        battingMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
+        result.GetComponent<UnityEngine.UI.Text>().enabled = true;
+
+
     }
+    
 
 
     private int CountEndNum(string concat)
@@ -187,9 +269,9 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < concat.Length; i++)
         {
-            for (int j = 0; j < cardInfo.Length; j++)
+            for (int j = 0; j < sprites.Length; j++)
             {
-                if (concat[i].ToString() == cardInfo[j].sprite.name)
+                if (concat[i].ToString() == sprites[j].name)
                 {
                     sumOfIndex += j;
                     break;
@@ -228,14 +310,13 @@ public class GameManager : MonoBehaviour
 
     }
 
-    
 
     //public void CardRotate()
     //{
     //    card[4].transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
     //    card[5].transform.Rotate(Vector3.back * 90);
-
     //}
+
 
     //coroutine
     //update¹®Ã³·³/¸ÖÆ¼½º·¹µåÃ³·³ ¿òÁ÷ÀÌ´Â °Å
@@ -267,6 +348,15 @@ public class GameManager : MonoBehaviour
     {"CH", 1000} //38±¤¶¯
 };
 
-    //²ý¼ö µñ¼Å³Ê¸® Ãß°¡ÇÏ±â
+
+    Dictionary<int, string> jokboNameOfScore = new Dictionary<int, string>()
+{
+    {10,"0²ý(¸ÁÅë)"}, {15, "1²ý"}, {20, "2²ý"}, {25, "3²ý"}, {30, "4²ý"}, {35,"5²ý"},
+    {40, "6²ý"}, {45, "7²ý"}, {50, "8²ý"}, {55, "9²ý(°©¿À)"},
+    {100, "¼¼·ú(4,6)"}, {110, "Àå»ç(4,10)"} ,{120, "Àå»æ(1,10)"}, {130, "±¸»æ(1,9)"},
+    {140,"µ¶»ç(1,4)"}, {150, "¾Ë¸®(1,2)"}, {200,"1¶¯"}, {210,"2¶¯"}, {220, "3¶¯"},
+    {230,"4¶¯"}, {240, "5¶¯"}, {250, "6¶¯"}, {260,"7¶¯"},{270,"8¶¯"},{280,"9¶¯"},{290,"10¶¯(Àå¶¯)"},
+    {500, "±¤¶¯"}, {1000, "38±¤¶¯"}, {410,"¶¯ÀâÀÌ"}, {750,"¾ÏÇà¾î»ç"}
+};
 
 }
