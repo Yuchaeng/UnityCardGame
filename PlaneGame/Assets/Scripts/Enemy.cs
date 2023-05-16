@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBullet : MonoBehaviour
-{
-
-    float destroyTimer = 4; //상한선, 이거 되면 죽음
+public class Enemy : MonoBehaviour
+{  
     float currentTimer = 0;
+    float destroyTimer = 5;
 
 
     // Start is called before the first frame update
@@ -24,5 +23,8 @@ public class PlayerBullet : MonoBehaviour
             Destroy(gameObject);
             currentTimer = 0;
         }
+
+        transform.Rotate(Vector3.back * Time.deltaTime * 100);  //new Vector3(0, 0, 1)
+
     }
 }
