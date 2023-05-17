@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-
     float destroyTimer = 4; //상한선, 이거 되면 죽음
     float currentTimer = 0;
-
 
     // Start is called before the first frame update
     void Start()

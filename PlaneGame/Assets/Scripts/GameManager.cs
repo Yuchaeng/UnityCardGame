@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] position = new GameObject[4];
     GameObject astInfo;
 
-    float spawnDelay = 1.5f;
+    float spawnDelay = .7f;
     float currentDelay = 0;
 
     int randNum = -1;
