@@ -30,8 +30,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         myRigid = GetComponent<Rigidbody2D>();
-        hpText.text = playerHp.ToString();
-        Debug.Log(playerHp);
+        hpText.text = playerHp.ToString();      
     }
 
     // Update is called once per frame
@@ -102,10 +101,12 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
             playerHp -= 5;
             hpText.text = playerHp.ToString();
-            Debug.Log(playerHp);
-        }
 
-        
+            if(playerHp <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
