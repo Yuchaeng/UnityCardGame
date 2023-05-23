@@ -9,8 +9,7 @@ public class BackGround : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        backRigid = GetComponent<Rigidbody2D>();
-        
+        backRigid = GetComponent<Rigidbody2D>();  
     }
 
     // Update is called once per frame
@@ -21,14 +20,13 @@ public class BackGround : MonoBehaviour
     private void FixedUpdate()
     {
         backRigid.MovePosition(backRigid.position + (Vector2.down * backSpeed * Time.fixedDeltaTime));
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.name == "BackGroundBoundary")
         {
-            transform.position = transform.position + new Vector3(0, 25, 0);
+            transform.position = transform.position + new Vector3(0, 32, 0);
         }
     }
 }
