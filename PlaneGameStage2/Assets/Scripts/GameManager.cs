@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
@@ -14,17 +15,20 @@ public class GameManager : MonoBehaviour
 
     int randNum = -1;
 
-    public GameObject playerObj;  //뱅기
+    public GameObject playerObj, playerInfo;  //뱅기
     public Player playercs;   //뱅기cs
     //오브젝트 -> 스크립트 순서로 접근
     public GameObject playerSpawn;
 
     public Text scoreText, scoreNum, hp;
 
+    public GameObject bossObj, bossSpawn;
+    bool isBossSpawn = true;
+
     // Start is called before the first frame update
     void Start()
     {
-        GameObject playerInfo = Instantiate(playerObj, playerSpawn.transform.position, playerSpawn.transform.rotation);
+        playerInfo = Instantiate(playerObj, playerSpawn.transform.position, playerSpawn.transform.rotation);
         playercs = playerInfo.GetComponent<Player>();  //playercs는 뱅기에 들어있음 playerObj의 스크립트 정보를 가져옴
         playercs.scoreText = scoreText;
         playercs.scoreNum = scoreNum;
@@ -54,6 +58,23 @@ public class GameManager : MonoBehaviour
 
         stoneRigid.AddForce(Vector2.down * 5, ForceMode2D.Impulse);
         currentTime = 0;
+
+        if(playercs.score >= 100 && isBossSpawn)
+        {
+            SpawnBoss();
+        }
+
+    }
+
+    void SpawnBoss()
+    {
+        isBossSpawn = false;
+        GameObject bossInfo = Instantiate(bossObj, bossSpawn.transform.position, bossSpawn.transform.rotation);
+        bossInfo.transform.Rotate(Vector3.back * 180);
+
+        Boss bossCs = bossInfo.GetComponent<Boss>();
+        bossCs.playerObj = playerInfo;
+        bossCs.playerCs = playercs;
     }
 
     //enemy prefab이라서 드래그로 뱅기obj 못넣음 -> 스크립트 상에서 정보 넘겨주기
