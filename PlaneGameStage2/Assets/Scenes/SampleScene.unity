@@ -312,7 +312,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 123536408}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.0071, y: 7.58, z: 0}
+  m_LocalPosition: {x: -0.04, y: 9.71, z: 0}
   m_LocalScale: {x: 1, y: 9.884459, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -423,7 +423,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135493325}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.47, y: 0.0395, z: 0}
+  m_LocalPosition: {x: 7.65, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 13.9941, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -579,6 +579,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -685,6 +686,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea20f13fec6620a419d8f29c37a16ebb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  radius: {x: 0, y: 0}
+  cubeSize: {x: 14, y: 16}
 --- !u!1 &550837229
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,7 +1036,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656415260}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.4600005, y: 0.0395, z: 0}
+  m_LocalPosition: {x: -7.63, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 13.9941, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1263,7 +1279,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1262516296}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.0082, y: -7.49, z: 0}
+  m_LocalPosition: {x: -0.07, y: -9.65, z: 0}
   m_LocalScale: {x: 1, y: 10.031051, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1516,7 +1532,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!224 &1713752986
 RectTransform:
@@ -1654,6 +1670,7 @@ MonoBehaviour:
   hp: {fileID: 2082245819}
   bossObj: {fileID: 5585082356415078324, guid: 670cc04fd397d7a4e9c81ed345f51dfa, type: 3}
   bossSpawn: {fileID: 1300330535}
+  camObj: {fileID: 519420028}
 --- !u!4 &1897685809
 Transform:
   m_ObjectHideFlags: 0

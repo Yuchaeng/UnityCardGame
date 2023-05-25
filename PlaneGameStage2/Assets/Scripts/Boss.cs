@@ -8,6 +8,7 @@ public class Boss : MonoBehaviour
     public Player playerCs;
     public GameObject bossBullet;
     Rigidbody2D bossBulletRigid;
+    public ParticleSystem particle;
 
     float current = 0;
     float delay = 1;
@@ -21,7 +22,7 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playerObj.transform.position);
+        //Debug.Log(playerObj.transform.position);
         transform.position = Vector2.MoveTowards(transform.position, new Vector3(-0.04f, 4.8f, 0), 3 * Time.deltaTime);
 
         current += Time.deltaTime;
@@ -39,6 +40,7 @@ public class Boss : MonoBehaviour
         if(collision.transform.tag == "bullet")
         {
             Destroy(collision.gameObject);
+            Instantiate(particle, collision.transform.position, collision.transform.rotation);
         }
         else if(collision.transform.tag == "Player")
         {

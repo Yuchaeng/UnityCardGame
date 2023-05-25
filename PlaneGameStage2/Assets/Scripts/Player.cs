@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     public Text scoreText, scoreNum;
     public float score = 0;
 
+    public ParticleSystem particle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,7 +62,13 @@ public class Player : MonoBehaviour
     {
         //update는 너무 빨리 불려져와서 update보다 안정적인 fixedupdate 사용
         inputVec = inputVec.normalized * Time.fixedDeltaTime * 5; //0.1초마다 불려져서 걍 정규화만 하면 한번 클릭했을 때 열배로 움직이는 느낌???
-        myRigid.MovePosition(myRigid.position + inputVec);
+        transform.position = new Vector2(transform.position.x + inputVec.x, transform.position.y + inputVec.y);
+        //myRigid.MovePosition(myRigid.position + inputVec);
+
+        float clampX = Mathf.Clamp(transform.position.x, -5, 5);
+        float clampY = Mathf.Clamp(transform.position.y, -5, 5);
+
+        transform.position = new Vector3(clampX, clampY, 0);
     }
 
     void Fire()
@@ -79,6 +87,7 @@ public class Player : MonoBehaviour
         if(collision.transform.tag == "enemy")
         {
             Destroy(collision.gameObject);
+            Instantiate(particle, collision.transform.position, collision.transform.rotation);
             playerHp -= 5;
             myHp.text = playerHp.ToString();
 

@@ -120,6 +120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 173a1eceb14c8534ab610db92dd540b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerObj: {fileID: 0}
+  playercs: {fileID: 0}
+  particle: {fileID: 19800002, guid: 72db583ee66404043913068c10fda727, type: 3}
+  item: {fileID: 3860063786609633994, guid: cd8f7150271f4d746b9aac6888e8d0dc, type: 3}
 --- !u!58 &5016212126678082461
 CircleCollider2D:
   m_ObjectHideFlags: 0

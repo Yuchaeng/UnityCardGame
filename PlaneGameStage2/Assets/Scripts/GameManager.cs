@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     public GameObject bossObj, bossSpawn;
     bool isBossSpawn = true;
 
+    public GameObject camObj;
+    MoveCamera camCS;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +37,9 @@ public class GameManager : MonoBehaviour
         playercs.scoreNum = scoreNum;
         //player prefab에 스코어 텍스트 없어서 null임 겜매니저에서 만든 스코어텍스트를 playercs.scoreText어쩌구에 넣어줌
         playercs.myHp= hp;
+
+        camCS = camObj.GetComponent<MoveCamera>();
+        camCS.target = playerInfo;
     }
 
     // Update is called once per frame

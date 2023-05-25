@@ -164,3 +164,4 @@ MonoBehaviour:
   playerObj: {fileID: 0}
   playerCs: {fileID: 0}
   bossBullet: {fileID: 8892338958464170092, guid: 42d025b9d65ee244e836e8935a35475a, type: 3}
+  particle: {fileID: 19800002, guid: 72db583ee66404043913068c10fda727, type: 3}

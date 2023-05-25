@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     public GameObject playerObj; //뱅기
     public Player playercs;
+    public ParticleSystem particle;
+    public GameObject item;
 
     // Start is called before the first frame update
     void Start()
@@ -37,11 +39,17 @@ public class Enemy : MonoBehaviour
         if(collision.transform.tag == "bullet")
         {
             Destroy(collision.gameObject);
+            Instantiate(particle, collision.transform.position, collision.transform.rotation);          
             enemyHp--;
 
             if(enemyHp <= 0)
             {   Destroy(gameObject);
-                playercs.score += 100;  //GameManaer에서 뱅기 정보 받았으므로 점수 올릴 수 있음
+
+                float random = Random.Range(0, 1);
+                if(random > 0.6f)
+                    Instantiate(item, collision.transform.position, collision.transform.rotation);
+                Debug.Log(random);
+                playercs.score += 100;  //GameManager에서 뱅기 정보 받았으므로 점수 올릴 수 있음
             }
         }
     }
