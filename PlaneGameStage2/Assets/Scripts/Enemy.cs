@@ -45,10 +45,13 @@ public class Enemy : MonoBehaviour
             if(enemyHp <= 0)
             {   Destroy(gameObject);
 
-                float random = Random.Range(0, 1);
+                float random = Random.Range(0, 1.0f);
                 if(random > 0.6f)
+                {
                     Instantiate(item, collision.transform.position, collision.transform.rotation);
+                }
                 Debug.Log(random);
+
                 playercs.score += 100;  //GameManager에서 뱅기 정보 받았으므로 점수 올릴 수 있음
             }
         }
