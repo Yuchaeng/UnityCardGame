@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     bool isGuang = false;
 
     public Text infoText, myCardIs, battingMsg, startMsg, result;
-    public Button gameStart, batting, openCard;
+    public Button gameStart, batting, openCard, restart;
     public Text[] jokboName = new Text[4];
 
     // Start is called before the first frame update
@@ -50,8 +50,10 @@ public class GameManager : MonoBehaviour
         startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
         result.GetComponent<UnityEngine.UI.Text>().enabled = false;
 
+        //오픈카드, 배팅 버튼 비활성화
         batting.GetComponent<UnityEngine.UI.Button>().interactable = false;
         openCard.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        restart.GetComponent<UnityEngine.UI.Button>().enabled = false;
 
         for (int i = 0; i < card.Length; i++)
         {
@@ -65,6 +67,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Restart()
+    {
+        //SceneManager.LoadScene(0);
     }
 
     public void GameStart()
@@ -142,14 +149,15 @@ public class GameManager : MonoBehaviour
         startMsg.text = "카드를 오픈하세요.";
         startMsg.GetComponent<UnityEngine.UI.Text>().enabled = true;
 
+        gameStart.GetComponent<UnityEngine.UI.Button>().interactable = false;
         openCard.GetComponent<UnityEngine.UI.Button>().interactable = true;
-
     }
 
     public void OpenCard()
     {
         startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
         batting.GetComponent<UnityEngine.UI.Button>().interactable = true;
+        openCard.GetComponent<UnityEngine.UI.Button>().interactable = false;
 
         cardInfo[0].sprite = sprites[randomIndex[0]];
         cardInfo[1].sprite = sprites[randomIndex[1]];
@@ -183,7 +191,6 @@ public class GameManager : MonoBehaviour
         cardInfo[3].sprite = sprites[randomIndex[3]];
         cardInfo[5].sprite = sprites[randomIndex[5]];
         cardInfo[7].sprite = sprites[randomIndex[7]];
-
 
         //땡잡이
         for (int i = 0; i < myScore.Length; i++)
@@ -258,10 +265,11 @@ public class GameManager : MonoBehaviour
         startMsg.GetComponent<UnityEngine.UI.Text>().enabled = false;
         result.GetComponent<UnityEngine.UI.Text>().enabled = true;
 
+        batting.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        restart.GetComponent<UnityEngine.UI.Button>().interactable = true;
+
 
     }
-    
-
 
     private int CountEndNum(string concat)
     {
