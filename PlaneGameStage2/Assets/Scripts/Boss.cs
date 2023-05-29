@@ -81,10 +81,10 @@ public class Boss : MonoBehaviour
                 bossBullets[i].velocity+= Vector2.zero;
             }
 
-            bossBullets[0].AddForce(new Vector2(0, 1) * 3, ForceMode2D.Impulse);
-            bossBullets[1].AddForce(new Vector2(0, -1) * 3, ForceMode2D.Impulse);
-            bossBullets[2].AddForce(new Vector2(1, 0) * 3, ForceMode2D.Impulse);
-            bossBullets[3].AddForce(new Vector2(-1, 0) * 3, ForceMode2D.Impulse);
+            bossBullets[0].AddForce((new Vector2(0, 1) + new Vector2(1,0))* 3, ForceMode2D.Impulse); //ø¿¿ß
+            bossBullets[1].AddForce((new Vector2(0, -1) + new Vector2(1,0))* 3, ForceMode2D.Impulse); //ø¿æ∆∑°
+            bossBullets[2].AddForce((new Vector2(0, 1) + new Vector2(-1,0)) * 3, ForceMode2D.Impulse); //øﬁ¿ß
+            bossBullets[3].AddForce((new Vector2(0, -1) + new Vector2(-1,0)) * 3, ForceMode2D.Impulse); //øﬁæ∆∑°
 
             //bulletRigids[0].AddForce(new Vector2(0, 1) * 3, ForceMode2D.Impulse);
             //bulletRigids[1].AddForce(new Vector2(0, -1) * 3, ForceMode2D.Impulse);
