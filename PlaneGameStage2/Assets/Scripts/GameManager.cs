@@ -28,6 +28,13 @@ public class GameManager : MonoBehaviour
     public GameObject camObj;
     MoveCamera camCS;
 
+    public GameObject bossHpbarObj;
+    float maxHp = 100;
+    float currentHp = 100;
+    Slider bossHpSlider;
+
+    Boss bossCs;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +47,10 @@ public class GameManager : MonoBehaviour
 
         camCS = camObj.GetComponent<MoveCamera>();
         camCS.target = playerInfo;
+
+        bossHpSlider = bossHpbarObj.GetComponent<Slider>();
+
+        //bossCs.bossHp = currentHp;
     }
 
     // Update is called once per frame
@@ -51,9 +62,36 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentTime < delayTime)
-            return;
+        if (currentTime > delayTime)
+        {
+            SpawnEnemy();        
+        }
+  
+        //여기에 bossHpSlider.value = bossCs.bossHp / maxHp; 쓰면 보스 스폰 안됨
 
+        if (playercs.score >= 100 && isBossSpawn)
+        {
+            SpawnBoss();
+        }
+
+        bossHpSlider.value = bossCs.bossHp / maxHp;
+        Debug.Log(bossCs.bossHp);
+
+    }
+
+    void SpawnBoss()
+    {
+        isBossSpawn = false;
+        GameObject bossInfo = Instantiate(bossObj, bossSpawn.transform.position, bossSpawn.transform.rotation);
+        bossInfo.transform.Rotate(Vector3.back * 180);
+
+        bossCs = bossInfo.GetComponent<Boss>();
+        bossCs.playerObj = playerInfo;
+        bossCs.playerCs = playercs;
+    }
+
+    void SpawnEnemy()
+    {
         randNum = Random.Range(0, spawnPos.Length);
         GameObject enemy = Instantiate(stone, spawnPos[randNum].transform.position, spawnPos[randNum].transform.rotation);
         Rigidbody2D stoneRigid = enemy.GetComponent<Rigidbody2D>();
@@ -64,27 +102,12 @@ public class GameManager : MonoBehaviour
 
         stoneRigid.AddForce(Vector2.down * 5, ForceMode2D.Impulse);
         currentTime = 0;
-
-        if(playercs.score >= 100 && isBossSpawn)
-        {
-            SpawnBoss();
-        }
-
-    }
-
-    void SpawnBoss()
-    {
-        isBossSpawn = false;
-        GameObject bossInfo = Instantiate(bossObj, bossSpawn.transform.position, bossSpawn.transform.rotation);
-        bossInfo.transform.Rotate(Vector3.back * 180);
-
-        Boss bossCs = bossInfo.GetComponent<Boss>();
-        bossCs.playerObj = playerInfo;
-        bossCs.playerCs = playercs;
     }
 
     //enemy prefab이라서 드래그로 뱅기obj 못넣음 -> 스크립트 상에서 정보 넘겨주기
     //1. enemy에 player 정보를 받을 수 있는 변수 선언
     //2. gamemanager에서 enemy에게 player정보를 넘겨줌
     //3. enemy파괴될 때 score를 올림
+
+
 }

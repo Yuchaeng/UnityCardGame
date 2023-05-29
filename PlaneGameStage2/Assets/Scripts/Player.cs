@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
 
             if(playerHp <= 0)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
                 myHp.text = "Die";
             }
         }
@@ -124,7 +124,6 @@ public class Player : MonoBehaviour
             score += 150;
         }
 
-       
     }
 
     private void OnTriggerExit2D(Collider2D collision)

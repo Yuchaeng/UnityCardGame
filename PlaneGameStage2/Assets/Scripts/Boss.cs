@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
@@ -10,13 +11,19 @@ public class Boss : MonoBehaviour
     Rigidbody2D bossBulletRigid;
     public ParticleSystem particle;
 
+    public GameObject[] barrels;
+
     List<GameObject> bulletArray = new List<GameObject>();
-    List<Rigidbody2D> bossBullets = new List<Rigidbody2D>();
+    List<Rigidbody2D> bulletArrayRigids = new List<Rigidbody2D>();
 
     Rigidbody2D[] bulletRigids = new Rigidbody2D[4];
 
     float current = 0;
     float delay = 1;
+
+    int patternSelect = -1;
+
+    public float bossHp = 100;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +53,7 @@ public class Boss : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Instantiate(particle, collision.transform.position, collision.transform.rotation);
+            bossHp--;
         }
         else if(collision.transform.tag == "Player")
         {
@@ -55,7 +63,27 @@ public class Boss : MonoBehaviour
 
     void BossPattern()
     {
-        StartCoroutine(FireCross());
+        //patternSelect = 3;
+        patternSelect++;
+
+        switch (patternSelect)
+        {
+            case 0:
+                StartCoroutine(FireCross());
+                break;
+            case 1:
+                StartCoroutine(FireX());
+                break;
+            case 2:
+                StartCoroutine(FireCircle());
+                break;
+            case 3:
+                StartCoroutine(FireSin());
+                patternSelect = -1;
+                break;
+            default:
+                break;
+        }
     }
 
     IEnumerator FireCross()
@@ -67,10 +95,10 @@ public class Boss : MonoBehaviour
             {
                 //리스트로 쓸 때 이렇게, 따로 for문 4부터 8까지 또 써줌, 걍 Add하는거라 외부 for문껴서 또 돌면 리스트 4번부터 계속 추가됨
                 bulletArray.Add(Instantiate(bossBullet, transform.position, transform.rotation));
-                bossBullets.Add(bulletArray[i].GetComponent<Rigidbody2D>());
+                bulletArrayRigids.Add(bulletArray[i].GetComponent<Rigidbody2D>());
 
                 //bulletRigids[i] = Instantiate(bossBullet, transform.position, transform.rotation).GetComponent<Rigidbody2D>();  // -> 배열
-                bossBullets[i].AddForce((playerObj.transform.position - transform.position).normalized * 7, ForceMode2D.Impulse);
+                bulletArrayRigids[i].AddForce((playerObj.transform.position - transform.position).normalized * 7, ForceMode2D.Impulse);
             }
 
             yield return new WaitForSeconds(.7f); //몇 초후에 리턴하라는 뜻
@@ -78,13 +106,13 @@ public class Boss : MonoBehaviour
             for (int i = 0; i < 4; i++)
             {
                 //bulletRigids[i].velocity = Vector2.zero;
-                bossBullets[i].velocity+= Vector2.zero;
+                bulletArrayRigids[i].velocity = Vector2.zero;
             }
 
-            bossBullets[0].AddForce((new Vector2(0, 1) + new Vector2(1,0))* 3, ForceMode2D.Impulse); //오위
-            bossBullets[1].AddForce((new Vector2(0, -1) + new Vector2(1,0))* 3, ForceMode2D.Impulse); //오아래
-            bossBullets[2].AddForce((new Vector2(0, 1) + new Vector2(-1,0)) * 3, ForceMode2D.Impulse); //왼위
-            bossBullets[3].AddForce((new Vector2(0, -1) + new Vector2(-1,0)) * 3, ForceMode2D.Impulse); //왼아래
+            bulletArrayRigids[0].AddForce(new Vector2(0, 1) * 3, ForceMode2D.Impulse); //오위
+            bulletArrayRigids[1].AddForce(new Vector2(0, -1) * 3, ForceMode2D.Impulse); //오아래
+            bulletArrayRigids[2].AddForce(new Vector2(1, 0) * 3, ForceMode2D.Impulse); //왼위
+            bulletArrayRigids[3].AddForce(new Vector2(-1, 0) * 3, ForceMode2D.Impulse); //왼아래
 
             //bulletRigids[0].AddForce(new Vector2(0, 1) * 3, ForceMode2D.Impulse);
             //bulletRigids[1].AddForce(new Vector2(0, -1) * 3, ForceMode2D.Impulse);
@@ -92,9 +120,89 @@ public class Boss : MonoBehaviour
             //bulletRigids[3].AddForce(new Vector2(-1, 0) * 3, ForceMode2D.Impulse);
 
             bulletArray.Clear();
-            bossBullets.Clear();
+            bulletArrayRigids.Clear();
         }
  
         Invoke("BossPattern", 1);
     }
+
+    IEnumerator FireX()
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                bulletArray.Add(Instantiate(bossBullet, transform.position, transform.rotation));
+                bulletArrayRigids.Add(bulletArray[i].GetComponent<Rigidbody2D>());
+
+                bulletArrayRigids[i].AddForce((playerObj.transform.position - transform.position).normalized * 7, ForceMode2D.Impulse);
+
+            }
+            yield return new WaitForSeconds(.8f);
+
+            for (int i = 0; i < 4; i++)
+            {
+                bulletArrayRigids[i].velocity = Vector2.zero;
+            }
+
+            bulletArrayRigids[0].AddForce(new Vector2(1, 1) * 3, ForceMode2D.Impulse); //오위
+            bulletArrayRigids[1].AddForce(new Vector2(-1, 1) * 3, ForceMode2D.Impulse); //왼위
+            bulletArrayRigids[2].AddForce(new Vector2(1, -1) * 3, ForceMode2D.Impulse); //오아래
+            bulletArrayRigids[3].AddForce(new Vector2(-1, -1) * 3, ForceMode2D.Impulse); //왼아래
+
+            bulletArray.Clear();
+            bulletArrayRigids.Clear();
+        }
+
+        Invoke("BossPattern", 1);
+
+    }
+
+    IEnumerator FireCircle()
+    {
+        Vector2 dir = playerObj.transform.position - transform.position;
+        for (int i = 0; i < 30; i++)
+        {
+            bulletArray.Add(Instantiate(bossBullet, transform.position, transform.rotation));
+            bulletArrayRigids.Add(bulletArray[i].GetComponent<Rigidbody2D>());
+            bulletArrayRigids[i].AddForce(dir.normalized * 4, ForceMode2D.Impulse);
+        }
+        
+        yield return new WaitForSeconds(.8f);
+
+        for (int i = 0; i < 30; i++)
+        {
+            Vector2 bulletDir = new Vector2(Mathf.Cos(Mathf.PI * 2 * i / 30), Mathf.Sin(Mathf.PI * 2 * i / 30));
+            bulletArrayRigids[i].velocity = Vector2.zero;
+            bulletArrayRigids[i].AddForce(bulletDir.normalized * 5, ForceMode2D.Impulse);
+        }
+
+        bulletArray.Clear();
+        bulletArrayRigids.Clear();
+        Invoke("BossPattern", 1);
+    }
+
+    IEnumerator FireSin()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            GameObject bulletInfo1 = Instantiate(bossBullet, barrels[0].transform.position, barrels[0].transform.rotation);
+            GameObject bulletInfo2 = Instantiate(bossBullet, barrels[1].transform.position, barrels[1].transform.rotation);
+
+            Rigidbody2D bulletRigid1 = bulletInfo1.GetComponent<Rigidbody2D>();
+            Rigidbody2D bulletRigid2 = bulletInfo2.GetComponent<Rigidbody2D>();
+
+            Vector2 bulletDir1 = new Vector2(Mathf.Sin(Mathf.PI * 3 * i/30), -1);
+            Vector2 bulletDir2 = new Vector2(Mathf.Sin(Mathf.PI * 3 * i/30), -1);
+
+            bulletRigid1.AddForce(bulletDir1.normalized * 5, ForceMode2D.Impulse);
+            bulletRigid2.AddForce(bulletDir2.normalized * 5, ForceMode2D.Impulse);
+
+            yield return new WaitForSeconds(.3f);
+
+        }
+
+        Invoke("BossPattern", 1);
+    }
+
 }
