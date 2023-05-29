@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -33,7 +34,8 @@ public class GameManager : MonoBehaviour
     bool isGuang = false;
 
     public Text infoText, myCardIs, battingMsg, startMsg, result;
-    public Button gameStart, batting, openCard, restart;
+    public Button gameStart, batting, openCard;
+    public GameObject restart;
     public Text[] jokboName = new Text[4];
 
     // Start is called before the first frame update
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
         //오픈카드, 배팅 버튼 비활성화
         batting.GetComponent<UnityEngine.UI.Button>().interactable = false;
         openCard.GetComponent<UnityEngine.UI.Button>().interactable = false;
-        restart.GetComponent<UnityEngine.UI.Button>().enabled = false;
+        restart.SetActive(false);
 
         for (int i = 0; i < card.Length; i++)
         {
@@ -71,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        //SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
 
     public void GameStart()
@@ -266,9 +268,7 @@ public class GameManager : MonoBehaviour
         result.GetComponent<UnityEngine.UI.Text>().enabled = true;
 
         batting.GetComponent<UnityEngine.UI.Button>().interactable = false;
-        restart.GetComponent<UnityEngine.UI.Button>().interactable = true;
-
-
+        restart.SetActive(true);
     }
 
     private int CountEndNum(string concat)
