@@ -23,7 +23,9 @@ public class Boss : MonoBehaviour
 
     int patternSelect = -1;
 
-    public float bossHp = 100;
+    public float currentBossHp = 100;
+    public float maxBossHp = 100;
+    public bool isBossDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -53,12 +55,15 @@ public class Boss : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Instantiate(particle, collision.transform.position, collision.transform.rotation);
-            bossHp--;
+            currentBossHp--;
+
+            if(currentBossHp <= 0)
+            {
+                isBossDead = true;
+                Destroy(gameObject);
+            }
         }
-        else if(collision.transform.tag == "Player")
-        {
-            Debug.Log("Äç");
-        }
+       
     }
 
     void BossPattern()
@@ -140,9 +145,14 @@ public class Boss : MonoBehaviour
             }
             yield return new WaitForSeconds(.8f);
 
+            //if (bulletArray[0].IsDestroyed() == true)
+            //{
+            //    continue;
+            //}
+
             for (int i = 0; i < 4; i++)
-            {
-                bulletArrayRigids[i].velocity = Vector2.zero;
+            {  
+               bulletArrayRigids[i].velocity = Vector2.zero; 
             }
 
             bulletArrayRigids[0].AddForce(new Vector2(1, 1) * 3, ForceMode2D.Impulse); //¿ÀÀ§
