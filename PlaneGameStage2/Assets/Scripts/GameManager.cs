@@ -29,11 +29,10 @@ public class GameManager : MonoBehaviour
     MoveCamera camCS;
 
     public GameObject bossHpbarObj;
-    float maxHp = 100;
-    float currentHp = 100;
     Slider bossHpSlider;
 
     Boss bossCs;
+    bool isBossInst = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +49,7 @@ public class GameManager : MonoBehaviour
 
         bossHpSlider = bossHpbarObj.GetComponent<Slider>();
 
-        //bossCs.bossHp = currentHp;
+        //bossCs.currentBossHp = currentHp;
     }
 
     // Update is called once per frame
@@ -62,20 +61,28 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (currentTime > delayTime)
         {
             SpawnEnemy();        
         }
-  
-        //여기에 bossHpSlider.value = bossCs.bossHp / maxHp; 쓰면 보스 스폰 안됨
 
+        //보스 스폰보다 위에 조건없이 그냥 bossHpSlider.value = bossCs.currentBossHp / maxHp; 쓰면 밑에 코드 안돌아감
+        
         if (playercs.score >= 100 && isBossSpawn)
         {
             SpawnBoss();
         }
 
-        bossHpSlider.value = bossCs.bossHp / maxHp;
-        Debug.Log(bossCs.bossHp);
+        if (isBossInst)
+        {
+            bossHpSlider.value = bossCs.currentBossHp / bossCs.maxBossHp;
+
+            if (bossCs.isBossDead)
+            {
+                bossHpbarObj.SetActive(false);
+            }
+        }
 
     }
 
@@ -88,6 +95,9 @@ public class GameManager : MonoBehaviour
         bossCs = bossInfo.GetComponent<Boss>();
         bossCs.playerObj = playerInfo;
         bossCs.playerCs = playercs;
+
+        bossHpbarObj.SetActive(true);
+        isBossInst = true;
     }
 
     void SpawnEnemy()

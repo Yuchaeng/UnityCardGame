@@ -12,10 +12,10 @@ public class Player : MonoBehaviour
 
     public Vector2 inputVec;
 
-    float fireDelay = .4f; //0.2초가 상한선
+    float fireDelay = .2f; //0.2초가 상한선
     float currentDelay = 0;
 
-    float bulletSpeed = 6;
+    float bulletSpeed = 7;
 
     bool hitLeftBox = false;
     bool hitRightBox = false;
@@ -24,13 +24,17 @@ public class Player : MonoBehaviour
 
     int playerHp = 100;
 
-    public Text hpText;
+    public ObjectManager objManager;
+
+    public float score = 0;
+    public Text scoreNum;
+
 
     // Start is called before the first frame update
     void Start()
     {
         myRigid = GetComponent<Rigidbody2D>();
-        hpText.text = playerHp.ToString();      
+        scoreNum.text = score.ToString();
     }
 
     // Update is called once per frame
@@ -70,8 +74,10 @@ public class Player : MonoBehaviour
 
         //Instantiate(bullet, transform.position, transform.rotation); -> gameObject에 담을 수 있음
         //Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>(); -> 하나만 앞으로 나감 bullet은 instantiate해서 복제된 애들이랑 달라서 복제된 애들 getcomponent는 못가져옴
-        
-        Rigidbody2D bulletRigid = Instantiate(bullet, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+
+        GameObject bulletInfo = objManager.SelectObj("playerBullet");
+        bulletInfo.transform.position = transform.position;
+        Rigidbody2D bulletRigid = bulletInfo.GetComponent<Rigidbody2D>();
         bulletRigid.AddForce(Vector2.up * bulletSpeed, ForceMode2D.Impulse);
 
         currentDelay = 0;
@@ -96,17 +102,11 @@ public class Player : MonoBehaviour
             }
         }
 
-        if(collision.transform.tag == "enemy")
-        {
-            Destroy(collision.gameObject);
-            playerHp -= 5;
-            hpText.text = playerHp.ToString();
-
-            if(playerHp <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
+        //if(collision.transform.tag == "enemy")
+        //{
+        //    collision.gameObject.SetActive(false);
+        //    playerHp -= 5;
+        //}
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -126,6 +126,14 @@ public class Player : MonoBehaviour
                 default:
                     break;
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "enemy")
+        {
+            collision.gameObject.SetActive(false);
         }
     }
 

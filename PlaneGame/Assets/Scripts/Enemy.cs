@@ -5,9 +5,13 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {  
     float currentTimer = 0;
-    float destroyTimer = 5;
+    float destroyTimer = 10;
 
-    int hp = 3;
+    public int hp = 10;
+    public GameObject particle;
+    public ObjectManager objectManager;
+
+    public Player playerCs;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +25,7 @@ public class Enemy : MonoBehaviour
         currentTimer += Time.deltaTime;
         if(currentTimer > destroyTimer)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             currentTimer = 0;
         }
 
@@ -33,16 +37,25 @@ public class Enemy : MonoBehaviour
     {
         if(collision.transform.tag == "PlayerBullet")
         {
-            Destroy(collision.gameObject);
+            collision.gameObject.SetActive(false);
             //Destroy(gameObject); //gameObject : 이 스크립트가 달려있는 오브젝트
+            particle = objectManager.SelectObj("particle");
+            particle.transform.position = collision.transform.position;
+            //particle.SetActive(true); //얘는 objManager 안거치고 한거
 
             hp--;
 
             if (hp <= 0)
             {
-                Destroy(gameObject);
-                hp = 3;
+                //재사용할 때 타이머 초기화 안돼서 타이머 0으로 설정해줌
+                currentTimer= 0;
+                playerCs.score += 100;
+                gameObject.SetActive(false);
+
+                //hp = 3;
+
             }
         }
     }
+
 }

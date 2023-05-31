@@ -16,8 +16,6 @@ public class MoveCamera : MonoBehaviour
     {
         camHeight = Camera.main.orthographicSize;
         camWidth = camHeight * Screen.width / Screen.height;
-
-        Debug.Log(camHeight);
         
     }
 

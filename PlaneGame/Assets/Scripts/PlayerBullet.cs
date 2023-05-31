@@ -19,7 +19,7 @@ public class PlayerBullet : MonoBehaviour
         currentTimer += Time.deltaTime;
         if(currentTimer > destroyTimer)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             currentTimer = 0;
         }
     }
