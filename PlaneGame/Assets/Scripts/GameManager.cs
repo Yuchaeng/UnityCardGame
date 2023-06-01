@@ -11,13 +11,14 @@ public class GameManager : MonoBehaviour
     public GameObject playerSpawnPos;
     public GameObject playerObj;
     public ObjectManager objManagerInGM;
-    public GameObject bossObj;
+    public GameObject bossObj, bossTargetPos;
 
     GameObject playerInfo;
 
     float spawnDelay = .7f;
     float currentDelay = 0;
-    public Text scoreInGm;
+
+    public Text scoreNum;
 
     int randNum = -1;
 
@@ -25,15 +26,16 @@ public class GameManager : MonoBehaviour
     Player playerCs;
     Boss bossCs;
 
+    bool isBossSpawn = false;
+
     private void Awake()
     {
         playerInfo = Instantiate(playerObj, playerSpawnPos.transform.position, playerSpawnPos.transform.rotation);
         playerCs = playerInfo.GetComponent<Player>();
-        playerCs.objManager = objManagerInGM;   //플레이어에게 objManager 못넣어주니까 강제로 지정해줌
+        playerCs.objManager = objManagerInGM;   //플레이어에게 objManagerInBoss 못넣어주니까 강제로 지정해줌
 
-        bossCs = bossObj.GetComponent<Boss>();
 
-        playerCs.scoreNum = scoreInGm;
+        playerCs.scoreNum = scoreNum;
     }
 
     // Start is called before the first frame update
@@ -49,11 +51,20 @@ public class GameManager : MonoBehaviour
 
         currentDelay += Time.deltaTime;
 
-        if(currentDelay > spawnDelay )
+        if (currentDelay > spawnDelay && !isBossSpawn)
+        {
+            SpawnBoss();
+        }
+
+        if (currentDelay > spawnDelay )
         {
             SpawnEnemy();
             currentDelay = 0;
+
         }
+
+
+
 
     }
 
@@ -65,14 +76,26 @@ public class GameManager : MonoBehaviour
         enemyInfo = objManagerInGM.SelectObj("enemy");
         enemyInfo.transform.position = position[randNum].transform.position;
         enemyCs = enemyInfo.GetComponent<Enemy>();
-        enemyCs.hp = 10;  //재사용할 때 체력이 다시 3으로 세팅되지않아서 다시 초기화해줌
+        enemyCs.hp = 3;  //재사용할 때 체력이 다시 3으로 세팅되지않아서 다시 초기화해줌
 
         enemyCs.objectManager = objManagerInGM;
+
+        enemyCs.playerObj = playerObj;
         enemyCs.playerCs = playerCs;  //***
 
         Rigidbody2D asteroidRigid = enemyInfo.GetComponent<Rigidbody2D>();
         asteroidRigid.AddForce(Vector2.down * 7, ForceMode2D.Impulse);
 
+    }
+
+    void SpawnBoss()
+    {
+        isBossSpawn= true;
+        GameObject bossInfo = Instantiate(bossObj, bossTargetPos.transform.position, bossTargetPos.transform.rotation);
+        bossInfo.transform.Rotate(Vector3.back * 180);
+
+        bossCs = bossObj.GetComponent<Boss>();
+        bossCs.objManagerInBoss = objManagerInGM;
     }
     
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class ObjectManager : MonoBehaviour
 {
-    public GameObject enemy, playerBullet, particle;
+    public GameObject enemy, playerBullet, particle, bossBullet;
 
-    GameObject[] enemyArr, playerBulletArr, particleArr;
+    GameObject[] enemyArr, playerBulletArr, particleArr, bossBulletArr;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +15,7 @@ public class ObjectManager : MonoBehaviour
         enemyArr = new GameObject[30];
         playerBulletArr = new GameObject[32];
         particleArr = new GameObject[32];
+        bossBulletArr = new GameObject[150];
         InitObj();
     }
 
@@ -36,6 +37,11 @@ public class ObjectManager : MonoBehaviour
             particleArr[i] = Instantiate(particle);
             particleArr[i].SetActive(false);
         }
+        for (int i = 0; i < bossBulletArr.Length; i++)
+        {
+            bossBulletArr[i] = Instantiate(bossBullet);
+            bossBulletArr[i].SetActive(false);
+        }
     }
 
     public GameObject SelectObj(string objectName)
@@ -51,6 +57,9 @@ public class ObjectManager : MonoBehaviour
                 break;
             case "particle":
                 gameObjArr = particleArr;
+                break;
+            case "bossBullet":
+                gameObjArr = bossBulletArr;
                 break;
             default:
                 gameObjArr = null;

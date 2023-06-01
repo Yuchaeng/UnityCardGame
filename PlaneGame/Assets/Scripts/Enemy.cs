@@ -7,10 +7,11 @@ public class Enemy : MonoBehaviour
     float currentTimer = 0;
     float destroyTimer = 10;
 
-    public int hp = 10;
+    public int hp = 3;
     public GameObject particle;
     public ObjectManager objectManager;
 
+    public GameObject playerObj;
     public Player playerCs;
 
     // Start is called before the first frame update
@@ -41,7 +42,7 @@ public class Enemy : MonoBehaviour
             //Destroy(gameObject); //gameObject : 이 스크립트가 달려있는 오브젝트
             particle = objectManager.SelectObj("particle");
             particle.transform.position = collision.transform.position;
-            //particle.SetActive(true); //얘는 objManager 안거치고 한거
+            //particle.SetActive(true); //얘는 objManagerInBoss 안거치고 한거
 
             hp--;
 
