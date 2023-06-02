@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
 
         Fire();
 
+        scoreNum.text = score.ToString();
     }
 
     private void FixedUpdate()

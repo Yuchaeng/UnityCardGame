@@ -27,8 +27,8 @@ public class BackGround : MonoBehaviour
     {
         if(collision.transform.name == "BackGroundBoundary")
         {
-            backRigid.MovePosition(new Vector2(0, 17));
-
+            //backRigid.MovePosition(new Vector2(0, 17));
+            backRigid.transform.position = backRigid.transform.position + new Vector3(0, 39, 0);
         }
     }
 }

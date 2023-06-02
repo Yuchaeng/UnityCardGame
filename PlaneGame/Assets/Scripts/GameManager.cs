@@ -7,13 +7,15 @@ public class GameManager : MonoBehaviour
 {
     public GameObject asteroid;
     public GameObject[] position = new GameObject[4];
-    GameObject enemyInfo;
     public GameObject playerSpawnPos;
     public GameObject playerObj;
     public ObjectManager objManagerInGM;
     public GameObject bossObj, bossTargetPos;
+    public GameObject bossHpObj;
+    Slider bossHpSlider;
 
     GameObject playerInfo;
+    GameObject enemyInfo;
 
     float spawnDelay = .7f;
     float currentDelay = 0;
@@ -27,6 +29,7 @@ public class GameManager : MonoBehaviour
     Boss bossCs;
 
     bool isBossSpawn = false;
+    
 
     private void Awake()
     {
@@ -34,8 +37,10 @@ public class GameManager : MonoBehaviour
         playerCs = playerInfo.GetComponent<Player>();
         playerCs.objManager = objManagerInGM;   //플레이어에게 objManagerInBoss 못넣어주니까 강제로 지정해줌
 
-
         playerCs.scoreNum = scoreNum;
+
+        bossHpSlider = bossHpObj.GetComponent<Slider>();
+        bossHpObj.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -51,11 +56,13 @@ public class GameManager : MonoBehaviour
 
         currentDelay += Time.deltaTime;
 
+        //보스 생성
         if (currentDelay > spawnDelay && !isBossSpawn)
         {
             SpawnBoss();
         }
 
+        //운석 생성
         if (currentDelay > spawnDelay )
         {
             SpawnEnemy();
@@ -80,7 +87,7 @@ public class GameManager : MonoBehaviour
 
         enemyCs.objectManager = objManagerInGM;
 
-        enemyCs.playerObj = playerObj;
+        enemyCs.playerObj = playerInfo;
         enemyCs.playerCs = playerCs;  //***
 
         Rigidbody2D asteroidRigid = enemyInfo.GetComponent<Rigidbody2D>();
@@ -94,8 +101,13 @@ public class GameManager : MonoBehaviour
         GameObject bossInfo = Instantiate(bossObj, bossTargetPos.transform.position, bossTargetPos.transform.rotation);
         bossInfo.transform.Rotate(Vector3.back * 180);
 
-        bossCs = bossObj.GetComponent<Boss>();
+        bossCs = bossInfo.GetComponent<Boss>();  //bossInfo말고 bossObj로 해서 Boss 스크립트에서 총알쏘려고할 때 널 오류남
         bossCs.objManagerInBoss = objManagerInGM;
+        bossCs.playerObj = playerInfo;
+        bossCs.playerCs = playerCs;
+        bossCs.bossSlider = bossHpSlider;
+
+        bossHpObj.SetActive(true);
     }
-    
+
 }

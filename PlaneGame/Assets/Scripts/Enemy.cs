@@ -50,9 +50,9 @@ public class Enemy : MonoBehaviour
             {
                 //재사용할 때 타이머 초기화 안돼서 타이머 0으로 설정해줌
                 currentTimer= 0;
-                playerCs.score += 100;
                 gameObject.SetActive(false);
-
+                playerCs.score += 100;
+                Debug.Log(playerCs.score);
                 //hp = 3;
 
             }
