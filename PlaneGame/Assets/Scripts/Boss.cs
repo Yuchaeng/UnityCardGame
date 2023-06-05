@@ -21,20 +21,32 @@ public class Boss : MonoBehaviour
     float bossCurrentHp = 100;
     float bossMAxHp = 100;
 
+    public GameObject bossSliderObj;
     public Slider bossSlider;
+
+    public GameObject winText;
+    public GameObject restartBtn;
 
     // Start is called before the first frame update
     void Start()
     {
         Invoke("BossPattern", 3);
-        bossSlider.value = bossCurrentHp / bossMAxHp;
+        bossSlider.value = bossCurrentHp / bossMAxHp;       
     }
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {       
         transform.position = Vector2.MoveTowards(transform.position, new Vector3(0, 5.17f, 0), Time.deltaTime * 3);
+
+        if (bossCurrentHp <= 0)
+        {
+            Destroy(gameObject);
+            bossSliderObj.SetActive(false);
+            winText.SetActive(true);
+            restartBtn.SetActive(true);
+            Time.timeScale = 0;
+        }
 
     }
 
@@ -145,14 +157,10 @@ public class Boss : MonoBehaviour
         if(collision.transform.tag == "PlayerBullet")
         {
             collision.gameObject.SetActive(false);
-            bossCurrentHp--;
+            bossCurrentHp-=20;
             bossSlider.value = bossCurrentHp / bossMAxHp;
-
-            //if(bossCurrentHp <= 0)
-            //{
-            //    Destroy(gameObject);
-                
-            //}
+            
+            playerCs.score += 100;
         }
     }
 

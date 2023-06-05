@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,19 +23,26 @@ public class Player : MonoBehaviour
     bool hitUpBox = false;
     bool hitDownBox = false;
 
-    int playerHp = 100;
+    float playerHp = 100;
+    float playerMaxHp = 100;
 
     public ObjectManager objManager;
+    public Slider playerHpSlider;
+    public GameObject playerHpObj;
 
     public float score = 0;
     public Text scoreNum;
+    public GameObject loseText;
+    public GameObject restartBtn;
 
+    GameObject particle;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigid = GetComponent<Rigidbody2D>();
         scoreNum.text = score.ToString();
+        playerHpSlider.value = playerMaxHp;
     }
 
     // Update is called once per frame
@@ -60,6 +68,16 @@ public class Player : MonoBehaviour
         Fire();
 
         scoreNum.text = score.ToString();
+
+        if(playerHp <= 0)
+        {
+            Destroy(gameObject);
+            playerHpObj.SetActive(false);
+            loseText.SetActive(true);
+            restartBtn.SetActive(true);
+
+            Time.timeScale = 0;
+        }
     }
 
     private void FixedUpdate()
@@ -103,11 +121,16 @@ public class Player : MonoBehaviour
             }
         }
 
-        //if(collision.transform.tag == "enemy")
-        //{
-        //    collision.gameObject.SetActive(false);
-        //    playerHp -= 5;
-        //}
+        if(collision.transform.tag == "enemy" || collision.transform.tag == "enemyBullet")
+        {
+            particle = objManager.SelectObj("particle");
+            particle.transform.position = collision.transform.position;
+            collision.gameObject.SetActive(false);
+            playerHp-=20;
+            playerHpSlider.value = playerHp / playerMaxHp;
+        }
+
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -130,12 +153,15 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "enemy")
-        {
-            collision.gameObject.SetActive(false);
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.tag == "enemy")
+    //    {
+    //        collision.gameObject.SetActive(false);
+    //        playerHp--;
+    //        playerHpSlider.value = playerHp / playerMaxHp;
+    //    }
+    //}
 
+    
 }

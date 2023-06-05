@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject bossObj, bossTargetPos;
     public GameObject bossHpObj;
     Slider bossHpSlider;
+    public GameObject playerHpObj;
+    Slider playerHpSlider;
 
     GameObject playerInfo;
     GameObject enemyInfo;
@@ -21,6 +25,9 @@ public class GameManager : MonoBehaviour
     float currentDelay = 0;
 
     public Text scoreNum;
+    public GameObject winText;
+    public GameObject loseText;
+    public GameObject restartBtn;
 
     int randNum = -1;
 
@@ -29,7 +36,7 @@ public class GameManager : MonoBehaviour
     Boss bossCs;
 
     bool isBossSpawn = false;
-    
+
 
     private void Awake()
     {
@@ -39,14 +46,22 @@ public class GameManager : MonoBehaviour
 
         playerCs.scoreNum = scoreNum;
 
+        playerHpSlider = playerHpObj.GetComponent<Slider>();
+        playerCs.playerHpSlider = playerHpSlider;
+        playerCs.playerHpObj = playerHpObj;
+
+        playerCs.loseText = loseText;
+        playerCs.restartBtn = restartBtn;
+
         bossHpSlider = bossHpObj.GetComponent<Slider>();
         bossHpObj.SetActive(false);
+
     }
 
     // Start is called before the first frame update
     void Start()
-    {   
-        
+    {
+
     }
 
     // Update is called once per frame
@@ -57,21 +72,17 @@ public class GameManager : MonoBehaviour
         currentDelay += Time.deltaTime;
 
         //焊胶 积己
-        if (currentDelay > spawnDelay && !isBossSpawn)
+        if (playerCs.score >= 100 && !isBossSpawn)
         {
             SpawnBoss();
         }
 
         //款籍 积己
-        if (currentDelay > spawnDelay )
+        if (currentDelay > spawnDelay)
         {
             SpawnEnemy();
             currentDelay = 0;
-
         }
-
-
-
 
     }
 
@@ -97,7 +108,7 @@ public class GameManager : MonoBehaviour
 
     void SpawnBoss()
     {
-        isBossSpawn= true;
+        isBossSpawn = true;
         GameObject bossInfo = Instantiate(bossObj, bossTargetPos.transform.position, bossTargetPos.transform.rotation);
         bossInfo.transform.Rotate(Vector3.back * 180);
 
@@ -105,9 +116,19 @@ public class GameManager : MonoBehaviour
         bossCs.objManagerInBoss = objManagerInGM;
         bossCs.playerObj = playerInfo;
         bossCs.playerCs = playerCs;
+
+        bossCs.bossSliderObj = bossHpObj;
         bossCs.bossSlider = bossHpSlider;
+        bossCs.winText = winText;
+        bossCs.restartBtn = restartBtn;
 
         bossHpObj.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1;
     }
 
 }

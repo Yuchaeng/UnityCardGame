@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
                 currentTimer= 0;
                 gameObject.SetActive(false);
                 playerCs.score += 100;
-                Debug.Log(playerCs.score);
+                //Debug.Log(playerCs.score);
                 //hp = 3;
 
             }
