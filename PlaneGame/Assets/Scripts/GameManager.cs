@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     public GameObject winText;
     public GameObject loseText;
     public GameObject restartBtn;
+    public GameObject homeBtn;
+    public GameObject gameWinObj;
+    public GameObject gameOverObj;
 
     int randNum = -1;
 
@@ -50,6 +53,7 @@ public class GameManager : MonoBehaviour
         playerCs.playerHpSlider = playerHpSlider;
         playerCs.playerHpObj = playerHpObj;
 
+        playerCs.gameOverObj = gameOverObj;
         playerCs.loseText = loseText;
         playerCs.restartBtn = restartBtn;
 
@@ -119,16 +123,24 @@ public class GameManager : MonoBehaviour
 
         bossCs.bossSliderObj = bossHpObj;
         bossCs.bossSlider = bossHpSlider;
+        bossCs.gameWinObj = gameWinObj;
         bossCs.winText = winText;
         bossCs.restartBtn = restartBtn;
+        
 
         bossHpObj.SetActive(true);
     }
 
-    public void Restart()
+    public void ReStart()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Stage1"); //씬 이름으로 불러오기
+        //SceneManager.LoadScene(0);  //위 방법이랑 같음
         Time.timeScale = 1;
+    }
+
+    public void GoMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 
 }

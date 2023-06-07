@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     public Text scoreNum;
     public GameObject loseText;
     public GameObject restartBtn;
+    public GameObject gameOverObj;
 
     GameObject particle;
 
@@ -69,15 +70,7 @@ public class Player : MonoBehaviour
 
         scoreNum.text = score.ToString();
 
-        if(playerHp <= 0)
-        {
-            Destroy(gameObject);
-            playerHpObj.SetActive(false);
-            loseText.SetActive(true);
-            restartBtn.SetActive(true);
-
-            Time.timeScale = 0;
-        }
+        
     }
 
     private void FixedUpdate()
@@ -128,6 +121,15 @@ public class Player : MonoBehaviour
             collision.gameObject.SetActive(false);
             playerHp-=20;
             playerHpSlider.value = playerHp / playerMaxHp;
+
+            if (playerHp <= 0)
+            {
+                Destroy(gameObject);
+                playerHpObj.SetActive(false);
+                gameOverObj.SetActive(true);
+
+                Time.timeScale = 0;
+            }
         }
 
 

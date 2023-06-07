@@ -26,6 +26,7 @@ public class Boss : MonoBehaviour
 
     public GameObject winText;
     public GameObject restartBtn;
+    public GameObject gameWinObj;
 
     // Start is called before the first frame update
     void Start()
@@ -38,15 +39,6 @@ public class Boss : MonoBehaviour
     void Update()
     {       
         transform.position = Vector2.MoveTowards(transform.position, new Vector3(0, 5.17f, 0), Time.deltaTime * 3);
-
-        if (bossCurrentHp <= 0)
-        {
-            Destroy(gameObject);
-            bossSliderObj.SetActive(false);
-            winText.SetActive(true);
-            restartBtn.SetActive(true);
-            Time.timeScale = 0;
-        }
 
     }
 
@@ -157,10 +149,22 @@ public class Boss : MonoBehaviour
         if(collision.transform.tag == "PlayerBullet")
         {
             collision.gameObject.SetActive(false);
+            GameObject particle = objManagerInBoss.SelectObj("particle");
+            particle.transform.position = collision.transform.position;
+
             bossCurrentHp-=20;
             bossSlider.value = bossCurrentHp / bossMAxHp;
             
             playerCs.score += 100;
+
+            if (bossCurrentHp <= 0)
+            {
+                Destroy(gameObject);
+                bossSliderObj.SetActive(false);
+                gameWinObj.SetActive(true);
+
+                Time.timeScale = 0;
+            }
         }
     }
 
