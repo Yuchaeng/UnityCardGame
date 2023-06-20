@@ -13,18 +13,18 @@ TagManager:
   - UI
   - 
   - 
+  - Ground
+  - 
+  - 
+  - 
+  - PlayerTrigger
+  - PlayerCollision
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - EnemyTrigger
+  - EnemyCollision
   - 
   - 
   - 
