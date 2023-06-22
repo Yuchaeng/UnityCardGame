@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public abstract class Movement : MonoBehaviour
 {
     public bool isMovable;
     public bool isDiretionChangeable;
@@ -38,14 +38,56 @@ public class Movement : MonoBehaviour
                 return;
 
             _horizontal = value;
-            onHorizontalChanged(value);
+            //onHorizontalChanged(value); //직접호출, 등록된 함수를 호출할 때마다 인자를 참조해서 사용 value 수정되면 수정된 value를 참조하게됨 중간에 결과값바뀔수도
+            //onHorizontalChanged.Invoke(value); //간접호출, 인자를 복사해놓고(따로 저장) 등록된 함수들은 복사된 값을 참조(set은 스택에 저장) value값 바껴도 결과값 안바뀜
+            //Invoke의 매개변수에 인자 전달 후 등록된 함수들은 Invoke의 매개변수를 참조함
+            //지역변수가 한번 더 생김 Invoke라는 함수 호출 스택이 한개 더 쌓여서
+            onHorizontalChanged?.Invoke(value); //null 체크 연산자 - null이면(등록된 함수 없으면) 호출 x
+        
         }
     }
     private float _horizontal;
     public event Action<float> onHorizontalChanged;
 
-    private void Update()
+    private Rigidbody2D _rigidbody;
+    private Vector2 _move;
+    private float _speed = 2.0f;
+
+    private void Awake()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        _rigidbody= GetComponent<Rigidbody2D>();
+    }
+
+    protected virtual void Update()
+    {
+        //_move = isMovable ? new Vector2(horizontal, 0.0f) : Vector2.zero;
+
+        if (isMovable)
+        {
+            _move = new Vector2(horizontal, 0.0f);
+        }
+        else
+        {
+            _move = Vector2.zero;
+        }
+
+        if (isDiretionChangeable)
+        {
+
+            if (_horizontal > 0)
+                direction = DIRECTION_RIGHT;
+            else if(_horizontal< 0)
+                direction = DIRECTION_LEFT;
+
+            //direction = _horizontal < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT; //왼쪽으로 가다 방향키 놓으면 다시 오른쪽 봄
+        }
+        
+        
+
+    }
+
+    private void FixedUpdate()
+    {
+        _rigidbody.position += _move * _speed * Time.fixedDeltaTime;
     }
 }
