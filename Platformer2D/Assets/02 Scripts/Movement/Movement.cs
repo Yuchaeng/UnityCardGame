@@ -51,7 +51,7 @@ public abstract class Movement : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Vector2 _move;
-    private float _speed = 2.0f;
+    [SerializeField] private float _speed = 1.0f;
 
     private void Awake()
     {

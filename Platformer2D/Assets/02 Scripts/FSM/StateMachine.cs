@@ -27,8 +27,8 @@ public class StateMachine : MonoBehaviour
         ChangeState(current.MoveNext());
     }
 
-
-    public void InitStates(Dictionary<StateType, IStateEnumerator<StateType>> states)  //start에서 초기화하다가 character에서 호출하는 형태로 바꿈
+    //start에서 초기화하다가 character에서 호출하는 형태로 바꿈
+    public void InitStates(Dictionary<StateType, IStateEnumerator<StateType>> states)  
     {
         this.states= states;
 
