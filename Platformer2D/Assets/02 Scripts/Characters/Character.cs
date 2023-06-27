@@ -25,6 +25,11 @@ public abstract class Character : MonoBehaviour, IHp
                 if(value <= _hpMin)
                 {
                     onHpMin?.Invoke();
+                    stateMachine.ChangeState(StateType.Die);
+                }
+                else
+                {
+                    stateMachine.ChangeState(StateType.Hurt);
                 }
             }
             else
@@ -63,10 +68,23 @@ public abstract class Character : MonoBehaviour, IHp
             StateType tmpType = value == 0.0f ? StateType.Idle : StateType.Move;
             stateMachine.ChangeState(tmpType);
         };
+
+        //onHpDecreased += (amount) => stateMachine.ChangeState(StateType.Hurt);
+        //onHpMin += () => stateMachine.ChangeState(StateType.Die);
     }
 
     protected virtual void Start()
     {
         hp = hpMax;
+    }
+
+    public virtual void Damage(GameObject damager, float amount)
+    {
+        hp -= amount;
+    }
+
+    public virtual void Heal(GameObject healer, float amount)
+    {
+        hp += amount;
     }
 }

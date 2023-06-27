@@ -13,4 +13,7 @@ public interface IHp
     event Action<float> onHpIncreased;
     event Action onHpMin;
     event Action onHpMax;
+
+    public void Damage(GameObject damager, float amount);
+    public void Heal(GameObject healer, float amount);
 }
