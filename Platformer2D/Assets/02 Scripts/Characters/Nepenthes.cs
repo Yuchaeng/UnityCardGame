@@ -16,7 +16,7 @@ public class Nepenthes : Enemy
         {
             {StateType.Idle, new StateIdle(stateMachine) },
             {StateType.Move, new StateMove(stateMachine) },
-            {StateType.Attack,  new StateAttack(stateMachine) },
+            {StateType.Attack, new StateAttack(stateMachine) },
             {StateType.Hurt, new StateHurt(stateMachine) },
             {StateType.Die, new StateDie(stateMachine) }
         });
@@ -30,8 +30,7 @@ public class Nepenthes : Enemy
 
         if (target && target.TryGetComponent(out IHp iHp))
         {
-            iHp.Damage(gameObject, _attackDamage);
-            
+            iHp.Damage(gameObject, _attackDamage); 
         }
     }
 

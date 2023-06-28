@@ -17,6 +17,7 @@ public interface IStateEnumerator<T>
     }
 
     Step current { get; }
+    bool canExecute { get; }
     T MoveNext();
     void Reset();
 }

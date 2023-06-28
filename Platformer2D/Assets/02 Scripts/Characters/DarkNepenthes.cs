@@ -17,7 +17,7 @@ public class DarkNepenthes : Enemy
         {
             {StateType.Idle, new StateIdle(stateMachine) },
             {StateType.Move, new StateMove(stateMachine) },
-            {StateType.Attack,  new StateAttack(stateMachine) },
+            {StateType.Attack, new StateAttack(stateMachine) },
             {StateType.Hurt, new StateHurt(stateMachine) },
             {StateType.Die, new StateDie(stateMachine) }
         });

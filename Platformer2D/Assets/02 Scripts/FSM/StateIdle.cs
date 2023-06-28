@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StateIdle : State
 {
+    public override bool canExecute => true;
+
     public StateIdle(StateMachine machine) : base(machine)
     {
     }
@@ -21,6 +23,8 @@ public class StateIdle : State
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
+                    movement.isMovable = true;
+                    movement.isDiretionChangeable = true;
                     animator.Play("Idle");
                     currentStep++;
                 }

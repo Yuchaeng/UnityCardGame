@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StateMove : State
 {
+    public override bool canExecute => true;
+
     public StateMove(StateMachine machine) : base(machine)
     {
     }
@@ -21,6 +23,8 @@ public class StateMove : State
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
+                    movement.isMovable = true;
+                    movement.isDiretionChangeable = true;
                     animator.Play("Move");
                     currentStep++;
                 }

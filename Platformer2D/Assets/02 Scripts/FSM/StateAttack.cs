@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class StateAttack : State
 {
+    public override bool canExecute => machine.currentType == StateType.Idle ||
+                                       machine.currentType == StateType.Move;
+    //idle이나 move일 때만 attack 가능하다는 뜻, canExecute 먼저 체크하고 조건 통과되면 상태바꿈
+
     public StateAttack(StateMachine machine) : base(machine)
     {
     }
@@ -21,6 +25,8 @@ public class StateAttack : State
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
+                    movement.isMovable = false;
+                    movement.isDiretionChangeable = false;
                     animator.Play("Attack");
                     currentStep++;
                 }
@@ -45,7 +51,7 @@ public class StateAttack : State
                 break;
             case IStateEnumerator<StateType>.Step.Finish:
                 {
-                    next = StateType.Idle;
+                    next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
                 }
                 break;
             default:
