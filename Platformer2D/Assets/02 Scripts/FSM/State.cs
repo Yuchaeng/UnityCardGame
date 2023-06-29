@@ -6,6 +6,10 @@ public enum StateType
 {
     Idle,
     Move,
+    Jump,
+    Fall,
+    Land,
+    Crouch,
     Attack,
     Hurt,
     Die
@@ -23,6 +27,7 @@ public abstract class State : IStateEnumerator<StateType>
     protected CapsuleCollider2D collider;
     protected Transform transform;
     protected Movement movement;
+    protected Character character;
 
     public State(StateMachine machine)
     {
@@ -32,6 +37,7 @@ public abstract class State : IStateEnumerator<StateType>
         this.collider = machine.GetComponent<CapsuleCollider2D>();
         this.transform= machine.GetComponent<Transform>();
         this.movement = machine.GetComponent<Movement>();
+        this.character = machine.GetComponent<Character>();
     }
 
     public abstract StateType MoveNext();

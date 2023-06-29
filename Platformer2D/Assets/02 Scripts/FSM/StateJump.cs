@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateAttack : State
+public class StateJump : State
 {
-    public override bool canExecute => machine.currentType == StateType.Idle ||
-                                       machine.currentType == StateType.Move;
-    //idle이나 move일 때만 attack 가능하다는 뜻, canExecute 먼저 체크하고 조건 통과되면 상태바꿈
+    public override bool canExecute => _groundDetector.isDetected &&
+                                       (machine.currentType == StateType.Idle ||
+                                       machine.currentType == StateType.Move);
+    //detected이면서 idle 또는 move
+    private GroundDetector _groundDetector;
 
-    public StateAttack(StateMachine machine) : base(machine)
+    public StateJump(StateMachine machine) : base(machine)
     {
+        _groundDetector = machine.GetComponent<GroundDetector>();
     }
 
     public override StateType MoveNext()
     {
-        StateType next = StateType.Attack;
+        StateType next = StateType.Jump;
 
         switch (currentStep)
         {
@@ -26,8 +29,9 @@ public class StateAttack : State
             case IStateEnumerator<StateType>.Step.Start:
                 {
                     movement.isMovable = false;
-                    movement.isDiretionChangeable = false;
-                    animator.Play("Attack");
+                    movement.isDiretionChangeable = true;
+                    animator.Play("Jump");
+                    rigidBody.AddForce(Vector2.up * character.jumpForce, ForceMode2D.Impulse);
                     currentStep++;
                 }
                 break;
@@ -43,16 +47,19 @@ public class StateAttack : State
                 break;
             case IStateEnumerator<StateType>.Step.WaitUntilActionFinished:
                 {
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    if (rigidBody.velocity.y <= 0)
                     {
                         currentStep++;
                     }
+
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Finish:
                 {
-                    //next = StateType.Idle;  //이렇게하면 방향키눌러도 idle거치고 move로 변함 
-                    next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
+                    if (_groundDetector.isDetected)
+                        next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
+                    else
+                        next = StateType.Fall;
                 }
                 break;
             default:

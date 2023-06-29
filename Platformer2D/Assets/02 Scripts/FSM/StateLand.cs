@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateAttack : State
+public class StateLand : State
 {
-    public override bool canExecute => machine.currentType == StateType.Idle ||
-                                       machine.currentType == StateType.Move;
-    //idle이나 move일 때만 attack 가능하다는 뜻, canExecute 먼저 체크하고 조건 통과되면 상태바꿈
+    public override bool canExecute => true;
 
-    public StateAttack(StateMachine machine) : base(machine)
+    public StateLand(StateMachine machine) : base(machine)
     {
     }
 
     public override StateType MoveNext()
     {
-        StateType next = StateType.Attack;
+        StateType next = StateType.Land;
 
         switch (currentStep)
         {
@@ -26,8 +24,8 @@ public class StateAttack : State
             case IStateEnumerator<StateType>.Step.Start:
                 {
                     movement.isMovable = false;
-                    movement.isDiretionChangeable = false;
-                    animator.Play("Attack");
+                    movement.isDiretionChangeable = true;
+                    animator.Play("Land");
                     currentStep++;
                 }
                 break;
@@ -51,7 +49,6 @@ public class StateAttack : State
                 break;
             case IStateEnumerator<StateType>.Step.Finish:
                 {
-                    //next = StateType.Idle;  //이렇게하면 방향키눌러도 idle거치고 move로 변함 
                     next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
                 }
                 break;

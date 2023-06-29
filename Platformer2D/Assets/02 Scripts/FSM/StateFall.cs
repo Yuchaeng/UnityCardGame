@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class StateAttack : State
+public class StateFall : State
 {
     public override bool canExecute => machine.currentType == StateType.Idle ||
-                                       machine.currentType == StateType.Move;
-    //idle이나 move일 때만 attack 가능하다는 뜻, canExecute 먼저 체크하고 조건 통과되면 상태바꿈
+                                       machine.currentType == StateType.Move ||
+                                       machine.currentType == StateType.Jump;
+    //detected이면서 idle 또는 move
+    private GroundDetector _groundDetector;
+    private float _startPosY;
 
-    public StateAttack(StateMachine machine) : base(machine)
+    public StateFall(StateMachine machine) : base(machine)
     {
+        _groundDetector = machine.GetComponent<GroundDetector>();
     }
 
     public override StateType MoveNext()
     {
-        StateType next = StateType.Attack;
+        StateType next = StateType.Fall;
 
         switch (currentStep)
         {
@@ -26,8 +31,9 @@ public class StateAttack : State
             case IStateEnumerator<StateType>.Step.Start:
                 {
                     movement.isMovable = false;
-                    movement.isDiretionChangeable = false;
-                    animator.Play("Attack");
+                    movement.isDiretionChangeable = true;
+                    animator.Play("Fall");
+                    _startPosY = rigidBody.position.y;  //rigidbody나 transform이나 읽는건 같은데 쓰는건 다름
                     currentStep++;
                 }
                 break;
@@ -43,16 +49,19 @@ public class StateAttack : State
                 break;
             case IStateEnumerator<StateType>.Step.WaitUntilActionFinished:
                 {
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    if (_groundDetector.isDetected)
                     {
                         currentStep++;
                     }
+
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Finish:
                 {
-                    //next = StateType.Idle;  //이렇게하면 방향키눌러도 idle거치고 move로 변함 
-                    next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
+                    if (_startPosY - rigidBody.position.y < character.landDistance)
+                        next = movement.horizontal == 0.0f ? StateType.Idle : StateType.Move;
+                    else
+                        next = StateType.Land; //높은데서 떨어진거
                 }
                 break;
             default:

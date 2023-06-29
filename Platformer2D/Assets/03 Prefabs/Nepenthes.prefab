@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8820423506754178693}
   - component: {fileID: 8820423506754178810}
   - component: {fileID: 2230495584658315386}
+  - component: {fileID: 356911164470738192}
   m_Layer: 18
   m_Name: Nepenthes
   m_TagString: Untagged
@@ -161,6 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a86ae330f6653e3499e6c21ed0d7da29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpForce: 2.5
+  landDistance: 1
   _hpMax: 200
   _attackBoxCenter: {x: 0.2, y: 0.15}
   _attackBoxSize: {x: 0.3, y: 0.3}
@@ -168,6 +171,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _attackDamage: 10
+--- !u!114 &356911164470738192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5573618785362222690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 415861792daebc347b37af8a5f73a8df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isDetected: 0
+  _castOffset: {x: 0, y: -0.01}
+  _castSize: {x: 0.08, y: 0.02}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &6028356923588374787
 GameObject:
   m_ObjectHideFlags: 0

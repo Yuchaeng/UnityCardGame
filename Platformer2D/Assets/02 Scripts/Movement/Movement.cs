@@ -15,6 +15,12 @@ public abstract class Movement : MonoBehaviour
         get => _direction;
         set
         {
+            if (isDiretionChangeable == false)
+                return;
+
+            if (_direction == value)
+                return;
+
             if(value < 0)  //음수 들어오면 왼쪽. 오른쪽을 기본 방향으로 설정했음
             {
                 transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
@@ -69,21 +75,21 @@ public abstract class Movement : MonoBehaviour
         {
             _move = new Vector2(horizontal, 0.0f);
         }
-        else
-        {
-            _move = Vector2.zero;
-        }
+        //else
+        //{
+        //    _move = Vector2.zero;
+        //}
 
-        if (isDiretionChangeable)
-        {
+        //if (isDiretionChangeable)
+        //{
 
-            if (_horizontal > 0)
-                direction = DIRECTION_RIGHT;
-            else if(_horizontal< 0)
-                direction = DIRECTION_LEFT;
+        //    if (_horizontal > 0)
+        //        direction = DIRECTION_RIGHT;
+        //    else if(_horizontal< 0)
+        //        direction = DIRECTION_LEFT;
 
-            //direction = _horizontal < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT; //왼쪽으로 가다 방향키 놓으면 다시 오른쪽 봄
-        }
+        //    //direction = _horizontal < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT; //왼쪽으로 가다 방향키 놓으면 다시 오른쪽 봄
+        //}
         
         
 

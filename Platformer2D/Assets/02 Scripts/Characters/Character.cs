@@ -4,6 +4,10 @@ using UnityEngine;
 //player와 enemy가 character를 상속받게 하려고 추상클래스로 만듦
 public abstract class Character : MonoBehaviour, IHp
 {
+    [Header("Stats")]
+    public float jumpForce = 2.5f;
+    public float landDistance = 1.0f;
+
     protected Movement movement;
     protected StateMachine stateMachine;
 

@@ -5,9 +5,11 @@ using UnityEngine;
 public class StateIdle : State
 {
     public override bool canExecute => true;
+    private GroundDetector _groundDetector;
 
     public StateIdle(StateMachine machine) : base(machine)
     {
+        _groundDetector = machine.GetComponent<GroundDetector>();
     }
 
     public override StateType MoveNext()
@@ -41,7 +43,10 @@ public class StateIdle : State
                 break;
             case IStateEnumerator<StateType>.Step.WaitUntilActionFinished:
                 {
-                    // looping...
+                    if (_groundDetector.isDetected == false)
+                    {
+                        next = StateType.Fall;
+                    }
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Finish:
