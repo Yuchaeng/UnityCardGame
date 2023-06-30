@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class Player : Character
 {
+    private PlayerInput playerInput;
     private float _horizontal;
     private float _vertical;
     public void OnHorizontal(InputValue value)
@@ -27,6 +28,17 @@ public class Player : Character
     public void OnJump()
     {
         stateMachine.ChangeState(StateType.Jump);
+    }
+
+    protected override void Awake()
+    {
+        //character의 awake를 virtual로 바꾸고 오버라이드
+        base.Awake();
+        playerInput = GetComponent<PlayerInput>();
+        InputAction crouchAction = playerInput.currentActionMap.FindAction("Crouch");
+        crouchAction.performed += ctx => stateMachine.ChangeState(StateType.Crouch);  //performed : 눌렸을 때
+        crouchAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp);  //canceled : 취소됐을 때
+
     }
 
     private void Update()

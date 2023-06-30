@@ -10,6 +10,7 @@ public enum StateType
     Fall,
     Land,
     Crouch,
+    StandUp,
     Attack,
     Hurt,
     Die
