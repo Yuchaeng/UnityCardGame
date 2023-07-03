@@ -25,11 +25,6 @@ public class Player : Character
         stateMachine.ChangeState(StateType.Attack);
     }
 
-    public void OnJump()
-    {
-        stateMachine.ChangeState(StateType.Jump);
-    }
-
     protected override void Awake()
     {
         //character의 awake를 virtual로 바꾸고 오버라이드
@@ -38,6 +33,10 @@ public class Player : Character
         InputAction crouchAction = playerInput.currentActionMap.FindAction("Crouch");
         crouchAction.performed += ctx => stateMachine.ChangeState(StateType.Crouch);  //performed : 눌렸을 때
         crouchAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp);  //canceled : 취소됐을 때
+
+        InputAction jumpAction = playerInput.currentActionMap.FindAction("Jump");
+        jumpAction.performed += ctx 
+            => stateMachine.ChangeState(stateMachine.currentType == StateType.Crouch ? StateType.DownJump : StateType.Jump);
 
     }
 
