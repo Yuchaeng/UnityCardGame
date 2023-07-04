@@ -29,8 +29,9 @@ public class StateDownJump : State
                     movement.isMovable = false;
                     movement.isDiretionChangeable = true;
                     animator.Play("Jump");
+                    rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0.0f);
                     rigidBody.AddForce(Vector2.up * character.downJumpForce, ForceMode2D.Impulse);
-                    _groundDetector.IgnoreLatest(collider);
+                    
                     currentStep++;
                 }
                 break;
@@ -41,6 +42,7 @@ public class StateDownJump : State
                 break;
             case IStateEnumerator<StateType>.Step.DoAction:
                 {
+                    _groundDetector.IgnoreLatest(collider);
                     currentStep++;
                 }
                 break;

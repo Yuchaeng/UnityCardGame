@@ -37,6 +37,7 @@ public class GroundDetector : MonoBehaviour
 
     //테스트용
     [SerializeField] private bool _isGroundExistBelow;
+    private WaitForSeconds _wait1of10Sec;
 
     public bool IsGroundExistBelow()
     {
@@ -62,6 +63,7 @@ public class GroundDetector : MonoBehaviour
     {
         _ignorings.Add(ground);
         Physics2D.IgnoreCollision(collider, ground, true);
+        yield return _wait1of10Sec;
         yield return new WaitUntil(() =>
         {
             Collider2D[] cols = 
@@ -98,10 +100,14 @@ public class GroundDetector : MonoBehaviour
         _ignorings.Remove(ground);
     }
 
+    private void Awake()
+    {
+        _wait1of10Sec = new WaitForSeconds(0.1f);
+    }
 
     private void FixedUpdate()
     {
-        _detected = Physics2D.OverlapBox((Vector2)transform.position + _castOffset, _castSize, 0.0f, _groundMask);
+        detected = Physics2D.OverlapBox((Vector2)transform.position + _castOffset, _castSize, 0.0f, _groundMask);
         
 
     }
