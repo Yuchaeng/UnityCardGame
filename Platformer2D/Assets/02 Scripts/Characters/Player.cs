@@ -30,13 +30,26 @@ public class Player : Character
         //character의 awake를 virtual로 바꾸고 오버라이드
         base.Awake();
         playerInput = GetComponent<PlayerInput>();
-        InputAction crouchAction = playerInput.currentActionMap.FindAction("Crouch");
-        crouchAction.performed += ctx => stateMachine.ChangeState(StateType.Crouch);  //performed : 눌렸을 때
-        crouchAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp);  //canceled : 취소됐을 때
+
+        //InputAction crouchAction = playerInput.currentActionMap.FindAction("Crouch");
+        //crouchAction.performed += ctx => stateMachine.ChangeState(StateType.Crouch);  //performed : 눌렸을 때
+        //crouchAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp);  //canceled : 취소됐을 때
 
         InputAction jumpAction = playerInput.currentActionMap.FindAction("Jump");
         jumpAction.performed += ctx 
             => stateMachine.ChangeState(stateMachine.currentType == StateType.Crouch ? StateType.DownJump : StateType.Jump);
+
+        InputAction upAction = playerInput.currentActionMap.FindAction("Up");
+        upAction.performed += ctx => stateMachine.ChangeState(StateType.LadderUp);
+
+        InputAction downAction = playerInput.currentActionMap.FindAction("Down");
+        downAction.performed += ctx =>
+        {
+            if (stateMachine.ChangeState(StateType.LadderDown)) { }
+            else if (stateMachine.ChangeState(StateType.Crouch)) { }
+            
+        };
+        downAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp);
 
     }
 
