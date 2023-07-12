@@ -2,22 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateJump : State
+public class StateDownJump : State
 {
-    public override bool canExecute => _groundDetector.isDetected &&
-                                       (machine.currentType == StateType.Idle ||
-                                       machine.currentType == StateType.Move);
-    //detected이면서 idle 또는 move
+    public override bool canExecute => _groundDetector.isDetected && machine.currentType == StateType.Crouch;
+
     private GroundDetector _groundDetector;
 
-    public StateJump(StateMachine machine) : base(machine)
+    public StateDownJump(StateMachine machine) : base(machine)
     {
         _groundDetector = machine.GetComponent<GroundDetector>();
     }
 
     public override StateType MoveNext()
     {
-        StateType next = StateType.Jump;
+        StateType next = StateType.DownJump;
 
         switch (currentStep)
         {
@@ -32,7 +30,8 @@ public class StateJump : State
                     movement.isDiretionChangeable = true;
                     animator.Play("Jump");
                     rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0.0f);
-                    rigidBody.AddForce(Vector2.up * character.jumpForce, ForceMode2D.Impulse);
+                    rigidBody.AddForce(Vector2.up * character.downJumpForce, ForceMode2D.Impulse);
+                    
                     currentStep++;
                 }
                 break;
@@ -43,6 +42,7 @@ public class StateJump : State
                 break;
             case IStateEnumerator<StateType>.Step.DoAction:
                 {
+                    _groundDetector.IgnoreLatest(collider);
                     currentStep++;
                 }
                 break;
