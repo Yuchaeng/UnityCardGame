@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class StateDownJump : State
 {
-    public override bool canExecute => _groundDetector.isDetected && machine.currentType == StateType.Crouch;
+    public override bool canExecute => _groundDetector.isDetected && 
+                                       _groundDetector.IsGroundExistBelow() &&
+                                       machine.currentType == StateType.Crouch;
 
     private GroundDetector _groundDetector;
 
