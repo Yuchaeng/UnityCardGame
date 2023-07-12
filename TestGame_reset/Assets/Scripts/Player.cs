@@ -12,7 +12,18 @@ public class Player : MonoBehaviour
     public Vector2 next_vec;
 
     public List<GameObject> enemy_arr = new List<GameObject>();
-    public List<float> distances;
+
+    Vector2 bullet_dir;
+    public GameObject bullet;
+
+    public float minDistance;
+    public float curDistance;
+
+    float fire_delay = 0.3f;
+    float current_delay;
+
+    public int minIdx;
+
     Animator my_animator;
     SpriteRenderer my_SR;
 
@@ -29,34 +40,49 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        current_delay = current_delay + Time.deltaTime;
+
         input_vec.x = Input.GetAxisRaw("Horizontal");
         input_vec.y = Input.GetAxisRaw("Vertical");
 
         next_vec = input_vec.normalized;
-        
-        if(enemy_arr.Count != 0)
+
+        //Vector2 dir = enemy_arr[i].transform.position - transform.position;
+        //float distance = Mathf.Sqrt(dir.x * dir.x + dir.y * dir.y);
+
+
+        if (enemy_arr.Count != 0)
         {
+            //여기서 초기화 안해줘서 오류남
+            minDistance = 999f;
+            minIdx = 0;
+
             for (int i = 0; i < enemy_arr.Count; i++)
             {
                 Debug.DrawRay(transform.position, enemy_arr[i].transform.position - transform.position, Color.red);
-                Vector2 dir = enemy_arr[i].transform.position - transform.position;
-                float distance = Mathf.Sqrt(dir.x * dir.x + dir.y * dir.y);
-
-                distances.Add(distance);
+                curDistance  = Vector2.Distance(enemy_arr[i].transform.position, transform.position);
+                if (curDistance <= minDistance)
+                {
+                    bullet_dir = enemy_arr[i].transform.position - transform.position;
+                    bullet_dir = bullet_dir.normalized;
+                    minDistance = curDistance;
+                    minIdx = i;
+                }
             }
 
-            for (int i = 0; i < enemy_arr.Count; i++)
+            Debug.DrawRay(transform.position, enemy_arr[minIdx].transform.position - transform.position, Color.blue);
+
+            if(current_delay > fire_delay)
             {
-                int index = distances.IndexOf(distances.Min());
-                
+                Fire(bullet_dir);
+                current_delay = 0;
             }
-
 
 
 
             //Debug.Log(distance);
             //Debug.Log(Vector2.Distance(transform.position, enemy_arr[0].transform.position));
-            
+
         }
 
     }
@@ -90,6 +116,13 @@ public class Player : MonoBehaviour
 
 
 
+    }
+
+    void Fire(Vector2 targetDir)
+    {
+        GameObject bulletInfo = Instantiate(bullet, transform.position, transform.rotation);
+        Rigidbody2D rigid = bulletInfo.GetComponent<Rigidbody2D>();
+        rigid.AddForce(targetDir * 4, ForceMode2D.Impulse);
     }
 
 
