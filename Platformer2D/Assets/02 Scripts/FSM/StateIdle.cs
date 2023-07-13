@@ -20,14 +20,15 @@ public class StateIdle : State
         {
             case IStateEnumerator<StateType>.Step.None:
                 {
+                    movement.isMovable = true;
+                    movement.isDiretionChangeable = true;
+                    animator.Play("Idle");
                     currentStep++;  
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
-                    movement.isMovable = true;
-                    movement.isDiretionChangeable = true;
-                    animator.Play("Idle");
+                    
                     currentStep++;
                 }
                 break;

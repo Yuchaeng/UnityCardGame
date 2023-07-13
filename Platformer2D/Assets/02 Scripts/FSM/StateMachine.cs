@@ -7,8 +7,10 @@ public class StateMachine : MonoBehaviour
 {
     public StateType currentType;
     public IStateEnumerator<StateType> current;
-    //public State current;  //원래 이거였는데 stateMachine이 굳이 State를 참조하기보다는 ISateEnumerator참조하는게
+    /*
+    //public State current;  //원래 이거였는데 stateMachine이 State보다 ISateEnumerator참조하는게
     //더 나아서? 바꿈 (인터페이스가 덜 변화함, state 참조해도 reset current 이 정도만 써서)
+    */
     public Dictionary<StateType, IStateEnumerator<StateType>> states;  // <어떤 상태일 때, 어떤 workflow>
 
     public bool ChangeState(StateType newType)
@@ -22,6 +24,7 @@ public class StateMachine : MonoBehaviour
         states[currentType].Reset();
         current = states[newType];
         currentType = newType;
+        current.MoveNext();
         return true;
     }
 
@@ -35,15 +38,16 @@ public class StateMachine : MonoBehaviour
     {
         this.states= states;
 
-        //states = new Dictionary<StateType, State>
+        /* //states = new Dictionary<StateType, State>
         //{
         //    { StateType.Idle, new StateIdle(this) },
         //    { StateType.Move, new StateMove(this) },
-        //};
+        //}; */
 
         current = states[currentType];
 
+        /*
         //fsm - idle, move 등등 만들어서 이렇게 추가하는 형식
-        //states.Add(StateType.Idle, new StateIdle(this));  //이거 단순화하면 위처럼 표현
+        //states.Add(StateType.Idle, new StateIdle(this));  //이거 단순화하면 위처럼 표현 */
     }
 }

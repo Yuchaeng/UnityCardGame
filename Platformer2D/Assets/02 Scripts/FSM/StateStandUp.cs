@@ -18,14 +18,15 @@ public class StateStandUp : State
         {
             case IStateEnumerator<StateType>.Step.None:
                 {
+                    movement.isMovable = false;
+                    movement.isDiretionChangeable = true;
+                    animator.Play("CrouchFinish");
                     currentStep++;
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
-                    movement.isMovable = false;
-                    movement.isDiretionChangeable = true;
-                    animator.Play("CrouchFinish");
+                    
                     currentStep++;
                 }
                 break;

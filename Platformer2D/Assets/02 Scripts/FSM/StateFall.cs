@@ -25,15 +25,16 @@ public class StateFall : State
         {
             case IStateEnumerator<StateType>.Step.None:
                 {
+                    movement.isMovable = false;
+                    movement.isDiretionChangeable = true;
+                    animator.Play("Fall");
+                    _startPosY = rigidBody.position.y;  //rigidbody나 transform이나 읽는건 같은데 쓰는건 다름
                     currentStep++;
                 }
                 break;
             case IStateEnumerator<StateType>.Step.Start:
                 {
-                    movement.isMovable = false;
-                    movement.isDiretionChangeable = true;
-                    animator.Play("Fall");
-                    _startPosY = rigidBody.position.y;  //rigidbody나 transform이나 읽는건 같은데 쓰는건 다름
+                    
                     currentStep++;
                 }
                 break;
