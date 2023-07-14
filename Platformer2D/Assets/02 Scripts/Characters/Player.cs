@@ -7,7 +7,11 @@ using UnityEngine.InputSystem;
 
 public class Player : Character
 {
+    public static Player instance;
     private PlayerInput playerInput;
+
+    public float attackForce => _attackForce;
+    [SerializeField] private float _attackForce = 10.0f;
     /*
     //private float _horizontal;
     //private float _vertical;
@@ -33,6 +37,8 @@ public class Player : Character
     {
         //character의 awake를 virtual로 바꾸고 오버라이드
         base.Awake();
+        
+        instance = this;
 
         InputManager.Map map = new InputManager.Map();
 
@@ -80,6 +86,8 @@ public class Player : Character
         //downAction.canceled += ctx => stateMachine.ChangeState(StateType.StandUp); */
 
     }
+
+    
 
     /* //private void Update()
     //{

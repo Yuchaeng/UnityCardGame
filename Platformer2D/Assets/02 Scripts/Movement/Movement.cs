@@ -31,10 +31,13 @@ public abstract class Movement : MonoBehaviour
                 transform.eulerAngles = Vector3.zero;
                 _direction = DIRECTION_RIGHT;
             }
+            onDirectionChanged.Invoke(_direction);
         }
     }
 
     private int _direction;
+    public event Action<int> onDirectionChanged;
+
     public float horizontal
     {
         get => _horizontal;
@@ -75,6 +78,7 @@ public abstract class Movement : MonoBehaviour
         {
             _move = new Vector2(horizontal, 0.0f);
         }
+        /*
         //else
         //{
         //    _move = Vector2.zero;
@@ -90,7 +94,7 @@ public abstract class Movement : MonoBehaviour
 
         //    //direction = _horizontal < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT; //왼쪽으로 가다 방향키 놓으면 다시 오른쪽 봄
         //}
-        
+        */
         
 
     }
