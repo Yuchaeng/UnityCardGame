@@ -31,7 +31,7 @@ public abstract class Movement : MonoBehaviour
                 transform.eulerAngles = Vector3.zero;
                 _direction = DIRECTION_RIGHT;
             }
-            onDirectionChanged.Invoke(_direction);
+            onDirectionChanged?.Invoke(_direction);
         }
     }
 
