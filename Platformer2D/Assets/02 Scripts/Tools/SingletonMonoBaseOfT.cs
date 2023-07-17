@@ -11,7 +11,21 @@ public class SingletonMonoBase<T> : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = new GameObject(nameof(T)).AddComponent<T>();  //without where keyword -> error, ex. int X, under component O 
+                T resource = Resources.Load<T>(typeof(T).Name);
+
+                if (resource)
+                {
+                    _instance = Instantiate(resource);
+                    
+                }
+                else
+                {
+                    _instance = new GameObject(typeof(T).Name).AddComponent<T>();
+
+                }
+
+
+               // _instance = new GameObject(typeof(T).Name).AddComponent<T>();  //without where keyword -> error, ex. int X, under component O 
             }
             return _instance;
         }

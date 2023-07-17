@@ -29,7 +29,6 @@ public class DarkNepenthesProjectile : MonoBehaviour
             if (collision.TryGetComponent(out IHp ihp))
             {
                 ihp.Damage(_owner, _damage);
-                ihp.hp -= _damage;
                 Destroy(gameObject);
             }
         }

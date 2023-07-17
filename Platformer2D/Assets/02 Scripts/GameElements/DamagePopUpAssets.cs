@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamagePopUpAssets : MonoBehaviour
+public class DamagePopUpAssets : SingletonMonoBase<DamagePopUpAssets>
 {
-    public static DamagePopUpAssets instance;
-
+    
     public DamagePopUp this[LayerMask layer]
     {
         get

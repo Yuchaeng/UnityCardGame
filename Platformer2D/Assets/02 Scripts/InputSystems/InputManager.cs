@@ -106,7 +106,7 @@ public class InputManager : SingletonMonoBase<InputManager>
 
     private void Update()
     {
-        current.InvokeAll();
+        current?.InvokeAll();
     }
 
 

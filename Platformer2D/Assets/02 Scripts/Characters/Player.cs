@@ -40,6 +40,11 @@ public class Player : Character
         
         instance = this;
 
+        onHpDecreased += (changed) => DamagePopUp.Create(1 << gameObject.layer,
+                                                         transform.position + Vector3.up * 0.3f,
+                                                         (int)changed);
+
+
         InputManager.Map map = new InputManager.Map();
 
         map.AddRawAxisAction("Horizontal", (value) =>

@@ -24,6 +24,8 @@ public class WarriorAnimationActions : PlayerAnimationActions
         if (col && col.TryGetComponent(out IHp ihp))
         {
             ihp.Damage(player.gameObject, player.attackForce);
+            DamagePopUp.Create(_attackTargetMask, col.transform.position + Vector3.up * .2f,
+                                                    (int)player.attackForce);
         }
     }
 
