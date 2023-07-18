@@ -14,6 +14,7 @@ public class SingletonBase<T>
                 //_instance = constructorInfo.Invoke(new object[] { }) as T;
 
                 _instance = Activator.CreateInstance<T>();  //타입에 해당하는 디폴트 생성자를 알아서 읽어옴
+                _instance.Init();
             }
 
             return _instance;
@@ -21,4 +22,6 @@ public class SingletonBase<T>
 
     }
     private static T _instance;
+
+    protected virtual void Init() { }
 }

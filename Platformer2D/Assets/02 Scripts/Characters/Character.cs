@@ -2,7 +2,7 @@
 using UnityEngine;
 
 //player와 enemy가 character를 상속받게 하려고 추상클래스로 만듦
-public abstract class Character : MonoBehaviour, IHp
+public abstract class Character : MonoBehaviour, IHp, IPausable
 {
     [Header("Stats")]
     public float jumpForce = 2.5f;
@@ -75,6 +75,8 @@ public abstract class Character : MonoBehaviour, IHp
             stateMachine.ChangeState(tmpType);
         };
 
+        PauseController.instance.Register(this);
+
         //onHpDecreased += (amount) => stateMachine.ChangeState(StateType.Hurt);
         //onHpMin += () => stateMachine.ChangeState(StateType.Die);
     }
@@ -92,5 +94,13 @@ public abstract class Character : MonoBehaviour, IHp
     public virtual void Heal(GameObject healer, float amount)
     {
         hp += amount;
+    }
+
+    public void Pause(bool pause)
+    {
+        bool enable = pause == false;
+        enabled = enable;
+        stateMachine.enabled = enabled;
+        movement.enabled = enabled;
     }
 }
