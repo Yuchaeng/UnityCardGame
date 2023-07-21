@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPG.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,18 +10,35 @@ namespace RPG.Data
     {
         public int id { get; set; }
 
-        public struct itemPair
+        public abstract class ItemSlotData
         {
-            public int id;
-            public int num;
+            public int itemID;
+            public int itemNum;
         }
 
-        public List<itemPair> items;
+        public class EquipmentSlotData : ItemSlotData
+        {
+            public int enhanceLevel;  //강화 레벨
+        }
 
-        public InventoryData(int totalSlot)
+        public class SpendSlotData : ItemSlotData
+        {
+
+        }
+
+        public class ETCSlotData : ItemSlotData
+        {
+
+        }
+
+        public ObservableCollection<EquipmentSlotData> equipmentSlotDatum;
+        public ObservableCollection<SpendSlotData> spendSlotDatum;
+        public ObservableCollection<ETCSlotData> etcSlotDatum;
+
+        /*public InventoryData(int totalSlot)
         {
             items = new List<itemPair>(totalSlot);
-        }
+        }*/
     }
 
 }
