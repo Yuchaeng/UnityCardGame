@@ -37,10 +37,13 @@ namespace RPG.Collections
             onCollectionChanged?.Invoke();
         }
 
-
         public bool Remove(T item)
         {
             int index = _items.IndexOf(item);
+
+            if (index < 0)
+                return false;
+
             RemoveAt(index);
             return true;
         }

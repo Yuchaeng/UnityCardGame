@@ -1,6 +1,7 @@
 ﻿using RPG.Collections;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 namespace RPG.Data
@@ -34,6 +35,7 @@ namespace RPG.Data
         public ObservableCollection<EquipmentSlotData> equipmentSlotDatum;
         public ObservableCollection<SpendSlotData> spendSlotDatum;
         public ObservableCollection<ETCSlotData> etcSlotDatum;
+        
 
         /*public InventoryData(int totalSlot)
         {
