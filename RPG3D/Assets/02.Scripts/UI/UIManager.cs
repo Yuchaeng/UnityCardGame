@@ -18,6 +18,7 @@ namespace RPG.UI
                 throw new Exception($"[UIManager] : Failed to register {ui.GetType()}");
         }
 
+        //타입으로 검색
         public bool TryGet<T>(out T ui) where T : IUI
         {
             if (uis.TryGetValue(typeof(T), out IUI value))
@@ -39,6 +40,11 @@ namespace RPG.UI
             uisShown.Remove(ui);
             uisShown.AddLast(ui);
             ui.sortingOrder = sortingOrder;
+        }
+
+        public void Pop(IUI ui)
+        {
+            uisShown.Remove(ui);
         }
 
         public void HideLast()
