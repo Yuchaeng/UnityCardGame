@@ -10,6 +10,7 @@ namespace RPG.Data
         public int numMax;
         public Sprite icon;
         public string description;
+        public GameObject model;
     }
 
 }
