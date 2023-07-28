@@ -14,8 +14,9 @@ namespace RPG.Data
         Equipment,
         Spend,
         ETC,
-    } 
+    }
 
+    [Serializable]
     public class InventoryData : IDataModel
     {
         public int id { get; set; }
@@ -38,6 +39,7 @@ namespace RPG.Data
             }
         }
 
+        [Serializable]
         public class EquipmentSlotData : ItemSlotData
         {
             public int enhanceLevel;  //강화 레벨
@@ -56,11 +58,13 @@ namespace RPG.Data
             }
         }
 
+        [Serializable]
         public class SpendSlotData : ItemSlotData
         {
 
         }
 
+        [Serializable]
         public class ETCSlotData : ItemSlotData
         {
 
@@ -69,7 +73,17 @@ namespace RPG.Data
         public ObservableCollection<EquipmentSlotData> equipmentSlotDatum;
         public ObservableCollection<SpendSlotData> spendSlotDatum;
         public ObservableCollection<ETCSlotData> etcSlotDatum;
-        
+
+        public IDataModel ResetWithDefaults()
+        {
+            equipmentSlotDatum = new ObservableCollection<EquipmentSlotData>(40);
+            spendSlotDatum = new ObservableCollection<SpendSlotData>(40);
+            etcSlotDatum = new ObservableCollection<ETCSlotData>(40);
+            return this;
+        }
+
+
+
 
         /*public InventoryData(int totalSlot)
         {
