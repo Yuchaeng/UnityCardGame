@@ -19,10 +19,13 @@ namespace RPG.Data
     [Serializable]
     public class InventoryData : IDataModel
     {
+
         public int id { get; set; }
 
         public abstract class ItemSlotData : IComparable<ItemSlotData>
         {
+            public bool isEmpty => itemNum <= 0;
+
             public int itemID;
             public int itemNum;
 

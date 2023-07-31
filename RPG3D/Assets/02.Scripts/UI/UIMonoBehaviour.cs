@@ -52,6 +52,11 @@ namespace RPG.UI
             onHide?.Invoke();
         }
 
+        public virtual void InputAction()
+        {
+
+        }
+
         protected virtual void Awake()
         {
             canvas = GetComponent<Canvas>();
