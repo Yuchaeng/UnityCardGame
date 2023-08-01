@@ -3506,7 +3506,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1531967692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4411,7 +4411,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1886812494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4512,7 +4512,6 @@ MonoBehaviour:
   _etcContent: {fileID: 416076609}
   _slotPrefab: {fileID: 7497302486079234894, guid: a23de5e1b8f3eae4a8834a603ef81b75,
     type: 3}
-  _inputModule: {fileID: 1469939724}
 --- !u!1 &1941815372
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,10 +37,18 @@ namespace RPG.UI
                 uisShown.Last.Value == ui)
                 return;
 
+            int sortingOrder = 0;
+            if (uisShown.Last != null)
+            {
+                uisShown.Last.Value.inputActionEnabled = false;
+                sortingOrder = uisShown.Last.Value.sortingOrder;
+            }
+
             //int sortingOrder = uis.Count > 1 ? uisShown.Last.Value.sortingOrder : 0;
-            int sortingOrder = uis.Count > 1 ? (uisShown.Last?.Value.sortingOrder ?? 0) : 0;
+            
             uisShown.Remove(ui);
             uisShown.AddLast(ui);
+            ui.inputActionEnabled = true;
             ui.sortingOrder = sortingOrder;
         }
 

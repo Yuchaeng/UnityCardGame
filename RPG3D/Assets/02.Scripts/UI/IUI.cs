@@ -7,6 +7,7 @@ namespace RPG.UI
 {
     public interface IUI
     {
+        public bool inputActionEnabled { get; set; }
         int sortingOrder { get; set; }
 
         event Action onShow;
@@ -17,6 +18,8 @@ namespace RPG.UI
 
         void ShowUnmanaged();
         void HideUnmanaged();
+
+        void InputAction();
     }
 }
 
