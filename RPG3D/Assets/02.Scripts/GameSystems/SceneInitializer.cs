@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SceneInitializer : MonoBehaviour
+namespace RPG.GameSystems
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SceneInitializer : MonoBehaviour
     {
-        
-    }
+        public static bool isInitialized;
+        [SerializeField] private List<GameObject> _needToBeAwaken;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Awake()
+        {
+            foreach (var item in _needToBeAwaken)
+            {
+                if (item.activeSelf == false)
+                {
+                    item.SetActive(true);
+                    item.SetActive(false);
+                }
+            }
+            SceneManager.sceneUnloaded -= ResetFlag;
+            SceneManager.sceneUnloaded += ResetFlag;
+            isInitialized = true;
+        }
+
+        private void ResetFlag(Scene scene)
+        {
+            isInitialized = false;
+        }
+
     }
 }
+

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RPG.Singletons;
+using RPG.UI;
 
 namespace RPG.EventSystems
 {
@@ -112,7 +113,7 @@ namespace RPG.EventSystems
         private void Awake()
         {
             global = new Map();
-            enabledCurrent = true;
+            SetUpWithGlobalMapSettings();
         }
 
         private void Update()
@@ -123,6 +124,21 @@ namespace RPG.EventSystems
                 current.InvokeAll();
         }
 
+        private void SetUpWithGlobalMapSettings()
+        {
+            
+            global.AddKeyDownAction(KeyCode.I, () =>
+            {
+                if (UIManager.instance.TryGet(out InventoryUI ui))
+                {
+                    if (ui.gameObject.activeSelf)
+                        ui.Hide();
+                    else
+                        ui.Show();
+                }
+            });
+            
+        }
 
     }
 }

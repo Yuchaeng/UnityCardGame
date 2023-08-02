@@ -55,6 +55,11 @@ namespace RPG.UI
         public void Pop(IUI ui)
         {
             uisShown.Remove(ui);
+
+            if (uisShown.Count > 0)
+            {
+                uisShown.Last.Value.inputActionEnabled = true;
+            }
         }
 
         public void HideLast()
