@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace RPG.Controllers
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : ControllerBase
     {
+
     }
 }
 
