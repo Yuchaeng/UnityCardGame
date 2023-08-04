@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class ItemDropped : MonoBehaviour
 {
-    private int _itemID;
-    private int _itemNum;
+    [SerializeField] private int _itemID;
+    [SerializeField] private int _itemNum;
     private MeshFilter _filter;
     private MeshRenderer _renderer;
     private bool _hasPickedUp;
+    private Vector3 _rendererLocation;
 
     public static ItemDropped Create(int itemID, int itemNum, Vector3 position)
     {
@@ -25,8 +26,14 @@ public class ItemDropped : MonoBehaviour
         itemDropped._filter = child.AddComponent<MeshFilter>();
         itemDropped._renderer = child.AddComponent<MeshRenderer>();
 
-        itemDropped._filter.sharedMesh = ItemDataRepository.instance[itemID].model.GetComponent<MeshFilter>().sharedMesh;
-        itemDropped._renderer.sharedMaterials = ItemDataRepository.instance[itemID].model.GetComponent<MeshRenderer>().sharedMaterials;
+        ItemData itemData = ItemDataRepository.instance[itemID];
+
+        child.transform.localPosition = itemData.droppedRenderLocation;
+        child.transform.localRotation = Quaternion.Euler(itemData.droppedRenderRotation);
+        child.transform.localScale = itemData.droppedRenderScale;
+
+        itemDropped._filter.sharedMesh = itemData.model.GetComponent<MeshFilter>().sharedMesh;
+        itemDropped._renderer.sharedMaterials = itemData.model.GetComponent<MeshRenderer>().sharedMaterials;
 
         itemDropped._itemID = itemID;
         itemDropped._itemNum = itemNum;
@@ -63,6 +70,7 @@ public class ItemDropped : MonoBehaviour
             if (remains > 0)
             {
                 _itemNum = remains;
+                _hasPickedUp = false;
             }
             else
             {
@@ -87,15 +95,18 @@ public class ItemDropped : MonoBehaviour
                 int expected = remains - itemData.numMax + slotData.itemNum;
                 if (expected > 0)
                 {
+                    slotData.itemID = itemData.id;
                     slotData.itemNum = itemData.numMax;
                     slotDatum[i] = slotData;
                     remains = expected;
                 }
                 else
                 {
+                    slotData.itemID = itemData.id;
                     slotData.itemNum = slotData.itemNum + remains;
                     slotDatum[i] = slotData;
                     remains = 0;
+                    break;
                 }
             }
         }
@@ -103,6 +114,51 @@ public class ItemDropped : MonoBehaviour
         return remains;
     }
 
- 
+    private void Start()
+    {
+        _rendererLocation = transform.GetChild(0).localPosition;
+        StartCoroutine(Pop());
+    }
+
+    IEnumerator Pop()
+    {
+        Vector3 dir = new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, Random.Range(-1.0f, 1.0f)).normalized;
+        dir.y *= 10.0f;
+        float speed = 1.0f;
+        float drag = 0.1f;
+        LayerMask groundMask = 1 << LayerMask.NameToLayer("Ground");
+
+        while (true)
+        {
+            Collider[] grounds = Physics.OverlapBox(transform.position, Vector3.one / 0.2f, Quaternion.identity, groundMask);
+            if (grounds.Length > 0)
+            {
+                dir.x = 0.0f;
+                dir.z = 0.0f;
+
+                if (Physics.Raycast(transform.position, Vector3.down, 1.0f, groundMask))
+                {
+                    break;
+                }
+            }
+
+            transform.position += new Vector3(dir.x * speed, dir.y, dir.z * speed) * Time.deltaTime;
+            dir.y -= 9.81f * Time.timeScale;          
+
+            if (speed > 0.0f)
+                speed -= drag * Time.deltaTime;
+
+            yield return null;
+        }
+    }
+
+    private void Update()
+    {
+        Transform child = transform.GetChild(0);
+
+        child.localPosition = _rendererLocation + 0.1f * Vector3.up * Mathf.Sin(Time.time);
+    }
+
+
 
 }

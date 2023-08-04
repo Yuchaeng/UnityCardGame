@@ -47,5 +47,6 @@ MonoBehaviour:
   _equipmentItemDatum:
   - {fileID: 11400000, guid: e5dcbaaeb64830c47a2da681020e9028, type: 2}
   - {fileID: 11400000, guid: 4d5c8dab5f1850d4587c711058a0556c, type: 2}
-  _spendItemDatum: []
+  _spendItemDatum:
+  - {fileID: 11400000, guid: 39f90bc649c675a48a61cb5adb130725, type: 2}
   _etcItemDatum: []
