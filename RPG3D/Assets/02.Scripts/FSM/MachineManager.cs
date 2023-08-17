@@ -36,13 +36,17 @@ namespace RPG.FSM
         private int _stateAnimHashID;
         private int _isDirtyAnimHashID;
 
-        public Vector2 move;
+        public Vector3 move;
         public float moveGain;
         [SerializeField] private LayerMask _groundMask;
         [SerializeField] private float _groundCastMaxDistance;
 
+        public float horizontal;
+        public float vertical;
+
         private Vector3 _inertia;
         private Rigidbody _rigidbody;
+        private bool _moveByAI;
 
         public bool ChangeState(Animator animator, StateType newState)
         {
@@ -79,32 +83,27 @@ namespace RPG.FSM
         }
 
         private void Update()
-        {
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
+        { 
             move = new Vector2(horizontal, vertical).normalized;
-            moveGain = Input.GetKey(KeyCode.LeftShift) ? 2.0f : 1.0f;
-            _animator.SetFloat("horizontal", horizontal * moveGain);
-            _animator.SetFloat("vertical", vertical * moveGain);
+            _animator.SetFloat("horizontal", Vector3.Dot(move * moveGain, transform.right));
+            _animator.SetFloat("vertical", Vector3.Dot(move * moveGain, transform.forward));
 
-            if (Input.GetMouseButtonDown(0))
+            /*
+            if (_moveByAI)
             {
-                ChangeState(StateType.Attack);
+                Vector3 dir = Vector3.zero; //todo -> Alt. ai actual destination direction
+                _animator.SetFloat("horizontal", Vector3.Dot(dir * moveGain, transform.right));
+                _animator.SetFloat("vertical", Vector3.Dot(dir * moveGain, transform.forward));
             }
+            else
+            {
+                move = new Vector2(horizontal, vertical).normalized;
+                _animator.SetFloat("horizontal", horizontal * moveGain);
+                _animator.SetFloat("vertical", vertical * moveGain);
+            }
+            */
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (isGrounded)
-                {
-                    if (hasJumped == false)
-                        ChangeState(StateType.Jump);
-                }
-                else
-                {
-                    if (hasSomersaulted == false)
-                        ChangeState(StateType.Somersault);
-                }
-            }
+            
         }
 
         private void FixedUpdate()
@@ -112,6 +111,7 @@ namespace RPG.FSM
             if (isGrounded)
             {
                 _inertia = move * moveGain;
+                transform.position += move * moveGain * Time.fixedDeltaTime;
             }
             else
             {
