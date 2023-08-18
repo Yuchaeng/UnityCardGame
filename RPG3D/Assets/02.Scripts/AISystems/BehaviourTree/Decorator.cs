@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RPG.AISystems.BehaviourTree
 {
-    public abstract class Decorator : Node, IParentOfChild
+    public class Decorator : Node, IParentOfChild
     {
         public Node child { get; set; }
         private Func<Result, Result> _decorate;
