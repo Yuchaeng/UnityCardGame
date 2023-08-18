@@ -68,7 +68,7 @@ namespace RPG.FSM
             return true;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _stateAnimHashID = Animator.StringToHash("state");
             _isDirtyAnimHashID = Animator.StringToHash("isDirty");
@@ -82,7 +82,7 @@ namespace RPG.FSM
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         { 
             move = new Vector2(horizontal, vertical).normalized;
             _animator.SetFloat("horizontal", Vector3.Dot(move * moveGain, transform.right));

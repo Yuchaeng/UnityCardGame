@@ -5,19 +5,20 @@ using UnityEngine;
 
 namespace RPG.AISystems.BehaviourTree
 {
-    public class Execution : Node
+    public class Sleep : Node
     {
-        private Func<Result> _execute;
+        private float _time;
 
-        public Execution(BehaviourTreeBuilder tree, BlackBoard blackBoard, Func<Result> execute)
+        public Sleep(float time, BehaviourTreeBuilder tree, BlackBoard blackBoard)
             : base(tree, blackBoard)
         {
-            _execute = execute;
+            _time = time;
         }
 
         public override Result Invoke()
         {
-            return _execute.Invoke();
+            tree.Sleep(_time);
+            return Result.Running;
         }
     }
 }

@@ -1,40 +1,68 @@
-﻿using System;
+﻿using RPG.FSM;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEditor.Rendering.BuiltIn.ShaderGraph;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace RPG.AISystems.BehaviourTree
 {
-    public class example
+    public class BlackBoard
     {
-        private void Start()
+        // owner
+        public GameObject owner;
+        public Transform transform;
+        public NavMeshAgent agent;
+        public MachineManager machineManager;
+
+        // target
+        public Transform target;
+
+        public BlackBoard(GameObject owner)
         {
-            BehaviourTreeBuilder builder = new BehaviourTreeBuilder();
-            builder.StartBuild()
-                .Condition(() => true)
-                    .Selector()
-                        .Execution(() => Result.Success)
-                        .Condition(() => true)
-                            .Execution(() => Result.Success)
-                        .Scquence()
-                            .Condition(() => true)
-                                .Execution(() => Result.Success)
-                            .Execution(() => Result.Success)
-                        .ExitCurrentComposite()
-                        .Execution(() => Result.Success);
+            this.owner = owner;
+            transform = owner.transform;
+            agent = owner.GetComponent<NavMeshAgent>();
+            machineManager = owner.GetComponent<MachineManager>();
         }
     }
 
     public class BehaviourTreeBuilder
     {
+        public BlackBoard blackBoard;
+        public Root root;
         private Node _current;
         private Stack<Composite> _compositeStack = new Stack<Composite>();
+        private bool paused;
 
-        public BehaviourTreeBuilder StartBuild()
+        public Result Tick()
         {
-            Node node = new Root();
+           return paused ? Result.Running : root.Invoke();
+        }
+
+        public void Sleep(float seconds)
+        {
+            paused = true;
+            blackBoard.machineManager.StartCoroutine(C_Sleep(seconds));
+        }
+
+        IEnumerator C_Sleep(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            paused = false;
+        }
+
+
+        public BehaviourTreeBuilder StartBuild(GameObject owner)
+        {
+            blackBoard = new BlackBoard(owner);
+            root = new Root(this, blackBoard);
+            Node node = root;
             _current = node;
             return this;
         }
@@ -61,7 +89,7 @@ namespace RPG.AISystems.BehaviourTree
 
         public BehaviourTreeBuilder Condition(Func<bool> condition)
         {
-            Node node = new Condition(condition);
+            Node node = new Condition(this, blackBoard, condition);
             AttachAsChild(_current, node);
             _current = node;
             return this;
@@ -69,7 +97,7 @@ namespace RPG.AISystems.BehaviourTree
 
         public BehaviourTreeBuilder Execution(Func<Result> execute)
         {
-            Node node = new Execution(execute);
+            Node node = new Execution(this, blackBoard, execute);
             AttachAsChild(_current, node);
 
             // 스택 비어있으면 빌드 끝난거
@@ -81,9 +109,24 @@ namespace RPG.AISystems.BehaviourTree
             return this;
         }
 
+        public BehaviourTreeBuilder Seek(float radius, float angle, float deltaAngle, LayerMask targetMask, Vector3 offset)
+        {
+            Node node = new Seek(this, blackBoard, radius, angle, deltaAngle, targetMask, offset);
+            AttachAsChild(_current, node);
+
+            // 스택 비어있으면 빌드 끝난거
+            if (_compositeStack.Count > 0)
+                _current = _compositeStack.Peek();
+            else
+                _current = null;
+
+            return this;
+        }
+
+
         public BehaviourTreeBuilder Scquence()
         {
-            Composite composite = new Sequence();
+            Composite composite = new Sequence(this, blackBoard);
             AttachAsChild(_current, composite);
             _compositeStack.Push(composite);
             _current = composite;
@@ -92,7 +135,7 @@ namespace RPG.AISystems.BehaviourTree
 
         public BehaviourTreeBuilder Selector()
         {
-            Composite composite = new Selector();
+            Composite composite = new Selector(this, blackBoard);
             AttachAsChild(_current, composite);
             _compositeStack.Push(composite);
             _current = composite;
@@ -101,7 +144,7 @@ namespace RPG.AISystems.BehaviourTree
 
         public BehaviourTreeBuilder Parallel(Parallel.Policy successPolicy)
         {
-            Composite composite = new Parallel(successPolicy);
+            Composite composite = new Parallel(this, blackBoard, successPolicy);
             AttachAsChild(_current, composite);
             _compositeStack.Push(composite);
             _current = composite;
