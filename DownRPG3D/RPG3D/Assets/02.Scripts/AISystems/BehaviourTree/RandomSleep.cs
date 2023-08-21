@@ -1,22 +1,23 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.AISystems.BehaviourTree
 {
     public class RandomSleep : Node
     {
-        private float _time;
-        public RandomSleep(BehaviourTreeBuilder tree, BlackBoard blackBoard)
+        private float _minTime;
+        private float _maxTime;
+
+
+        public RandomSleep(float minTime, float maxTime, BehaviourTreeBuilder tree, BlackBoard blackBoard)
             : base(tree, blackBoard)
         {
-            _time = UnityEngine.Random.Range(0.0f, 1.5f);
+            _minTime = minTime;
+            _maxTime = maxTime;
         }
 
         public override Result Invoke()
         {
-            tree.Sleep(_time);
+            tree.Sleep(Random.Range(_minTime, _maxTime));
             return Result.Running;
         }
     }

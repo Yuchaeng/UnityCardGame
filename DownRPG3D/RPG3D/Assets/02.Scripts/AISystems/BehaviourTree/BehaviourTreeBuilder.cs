@@ -103,9 +103,10 @@ namespace RPG.AISystems.BehaviourTree
 
             return this;
         }
-        public BehaviourTreeBuilder Seek(float radius, float angle, float deltaAngle, LayerMask targetMask, Vector3 offset)
+
+        public BehaviourTreeBuilder Patrol(float range)
         {
-            Node node = new Seek(this, blackBoard, radius, angle, deltaAngle, targetMask, offset);
+            Node node = new Patrol(range, this, blackBoard);
             AttachAsChild(_current, node);
 
             if (_compositeStack.Count > 0)
@@ -116,9 +117,22 @@ namespace RPG.AISystems.BehaviourTree
             return this;
         }
 
-        public BehaviourTreeBuilder MoveRandom(float min, float max, GameObject gameObject)
+        public BehaviourTreeBuilder RandomSleep(float minTime, float maxTime)
         {
-            Node node = new MoveRandom(this, blackBoard, min, max, gameObject);
+            Node node = new RandomSleep(minTime, maxTime, this, blackBoard);
+            AttachAsChild(_current, node);
+
+            if (_compositeStack.Count > 0)
+                _current = _compositeStack.Peek();
+            else
+                _current = null;
+
+            return this;
+        }
+
+        public BehaviourTreeBuilder Seek(float radius, float angle, float deltaAngle, LayerMask targetMask, Vector3 offset)
+        {
+            Node node = new Seek(this, blackBoard, radius, angle, deltaAngle, targetMask, offset);
             AttachAsChild(_current, node);
 
             if (_compositeStack.Count > 0)

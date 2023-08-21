@@ -4,12 +4,12 @@ using UnityEngine;
 using RPG.AISystems.BehaviourTree;
 using RPG.FSM;
 using UnityEngine.AI;
+using System.Security;
 
 public class EnemyMachineManager : MachineManager
 {
     private BehaviourTreeBuilder _behaviourTree;
-    private NavMeshAgent _agent;
-    private RandomSleep _randomSleep;
+
 
     [Header("AI")]
     [SerializeField] private float _seek_radius;
@@ -18,15 +18,15 @@ public class EnemyMachineManager : MachineManager
     [SerializeField] private LayerMask _seek_targetMask;
     [SerializeField] private Vector3 _seek_offset;
     [SerializeField] private float _attack_range;
+    [SerializeField] private float _patrol_range;
+    [SerializeField] private float _patrol_minTime;
+    [SerializeField] private float _patrol_maxTime;
 
 
     protected override void Awake()
     {
         base.Awake();
         _behaviourTree = new BehaviourTreeBuilder();
-        _agent = GetComponent<NavMeshAgent>();
-        _agent.destination = new Vector3(Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f), Random.Range(0.0f, 10.0f));
-        _randomSleep = new RandomSleep(_behaviourTree, _behaviourTree.blackBoard);
 
         _behaviourTree.StartBuild(gameObject)
             .Selector()
@@ -35,9 +35,20 @@ public class EnemyMachineManager : MachineManager
                     .Condition(() => _behaviourTree.blackBoard.target != null &&
                                      Vector3.Distance(_behaviourTree.blackBoard.target.position, transform.position) < _attack_range)
                         .Execution(() => ChangeState(StateType.Attack) ? Result.Success : Result.Failure)
+                    .ExitCurrentComposite()
                 .Sequence()
-                    .MoveRandom(0.0f, 10.0f, gameObject)
-                    .Execution(() => _randomSleep.Invoke());
+                    .Condition(() =>
+                    {
+                        BlackBoard blackBoard = _behaviourTree.blackBoard;
+                        if (blackBoard.target == null &&
+                            blackBoard.agent.remainingDistance <= blackBoard.agent.stoppingDistance)
+                        {
+                            return true;
+                        }
+                        return false;
+                    })
+                    .Patrol(_patrol_range);
+                    //.RandomSleep(_patrol_minTime, _patrol_maxTime);
 
         
     }
