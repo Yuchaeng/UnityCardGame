@@ -23,7 +23,7 @@ namespace RPG.AISystems.BehaviourTree
         public override Result Invoke()
         {
             float l = Random.Range(0, _range);
-            float theta = Random.Range(0, 2 * Mathf.PI);
+            float theta = Random.Range(0, 2.0f * Mathf.PI);
             Vector3 expected = blackBoard.transform.position +
                                new Vector3(l * Mathf.Cos(theta), 0.0f, l * Mathf.Sin(theta));
 
@@ -32,9 +32,9 @@ namespace RPG.AISystems.BehaviourTree
                                    Vector3.down,
                                    out RaycastHit hit,
                                    _maxHeight * 2.0f,
-                                   _groundMask))
+                                   _groundMask) == false)
             {
-               return Result.Failure; 
+                return Result.Failure;
             }
 
             if (NavMesh.SamplePosition(hit.point, out NavMeshHit areaHit, _tolerance, NavMesh.AllAreas)) // walkable¸¸ ÇÏ¸é 1 << 0
