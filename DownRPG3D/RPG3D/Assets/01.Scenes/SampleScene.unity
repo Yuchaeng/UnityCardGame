@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -848,7 +848,7 @@ PrefabInstance:
     - target: {fileID: 6161419518583798879, guid: bf8e90c49425ba94fb8ea9e5c9238d6a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -27
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 6161419518583798879, guid: bf8e90c49425ba94fb8ea9e5c9238d6a,
         type: 3}
@@ -4865,12 +4865,12 @@ PrefabInstance:
     - target: {fileID: 6161419518583798879, guid: bf8e90c49425ba94fb8ea9e5c9238d6a,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 216
+      value: 193
       objectReference: {fileID: 0}
     - target: {fileID: 6161419518583798879, guid: bf8e90c49425ba94fb8ea9e5c9238d6a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -27
+      value: -69
       objectReference: {fileID: 0}
     - target: {fileID: 6161419518583798879, guid: bf8e90c49425ba94fb8ea9e5c9238d6a,
         type: 3}
@@ -22910,13 +22910,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _statList:
   - Key: 0
-    Value: 100
+    Value: 500
   - Key: 1
-    Value: 0
+    Value: 100
   - Key: 2
-    Value: 20
+    Value: 10
   - Key: 3
-    Value: 0
+    Value: 10
 --- !u!114 &8908653479605491143
 MonoBehaviour:
   m_ObjectHideFlags: 0
