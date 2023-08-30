@@ -10,15 +10,15 @@ using UnityEngine.UI;
 
 namespace RPG.UI
 {
-    public class InventorySlotPickerUI : UIMonoBehaviour
+    public class ItemsEquippedSlotPickerUI : UIMonoBehaviour
     {
         [SerializeField] private Image _preview;
         private ItemType _pickedType;
         private int _pickedIndex;
-        private InventoryData.ItemSlotData _pickedData;
-        private InventoryPresenter _presenter;
+        private ItemsEquippedData.ItemEquippedSlotData _pickedData;
+        private ItemsEquippedPresenter _presenter;
 
-        public void Show(ItemType type, int index, InventoryData.ItemSlotData slotData)
+        public void Show(ItemType type, int index, ItemsEquippedData.ItemEquippedSlotData slotData)
         {
             base.Show();
             _pickedType = type;
@@ -49,9 +49,9 @@ namespace RPG.UI
                         {
                             if (other.itemType == _pickedType)
                             {
-                                if (other.slotIndex != _pickedIndex)
+                                if (other.itemID != _pickedData.itemID)
                                 {
-                                    _presenter.swapCommand.TryExecute(_pickedType, _pickedIndex, other.slotIndex);
+                                    //_presenter.swapCommand.TryExecute(_pickedType, _pickedIndex, other.slotIndex);
                                 }
                                 Hide();
                                 return;
@@ -78,17 +78,8 @@ namespace RPG.UI
 
                     Hide();
                 }
-                //World Å¬¸¯½Ã
-                else
-                {
-                    if (_presenter.dropCommand.TryExecute(_pickedType, _pickedIndex, _pickedData.itemNum))
-                    {
-                        Hide();
-                        return;
-                    }
-
-                    Hide();
-                }
+               
+                
             }
 
         }
@@ -96,9 +87,9 @@ namespace RPG.UI
         protected override void Start()
         {
             base.Start();
-            if (UIManager.instance.TryGet(out InventoryUI inventoryUI))
+            if (UIManager.instance.TryGet(out ItemsEquippedUI itemsEquippedUI))
             {
-                _presenter = inventoryUI.presenter;
+                _presenter = itemsEquippedUI.presenter;
             }
         }
 
