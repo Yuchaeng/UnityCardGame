@@ -1,4 +1,5 @@
 using RPG.GameElements.Stats;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,8 @@ public enum StatModifyingOption
     MulPercent,
 }
 
-public class StatModifier : MonoBehaviour
+[Serializable]
+public class StatModifier
 {
     public StatType type;
     public StatModifyingOption modifyingOption;
