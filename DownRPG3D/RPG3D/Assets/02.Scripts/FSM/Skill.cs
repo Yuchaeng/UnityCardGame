@@ -11,7 +11,7 @@ namespace RPG.FSM
         protected ActiveSkillData data;
         [SerializeField] private bool _hasExitTime;
         [SerializeField] private StateType _destination;
-        private int _comboStack;
+        public int comboStack;
         private int _comboStackAnimHashID;
         private bool _isCorouting;
         private Coroutine _coroutine;
@@ -34,8 +34,8 @@ namespace RPG.FSM
                 _isCorouting = false;
             }
 
-            _comboStack = _comboStack < data.comboStackMax ? _comboStack + 1 : 0;
-            animator.SetInteger(_comboStackAnimHashID, _comboStack);
+            comboStack = comboStack < data.comboStackMax ? comboStack + 1 : 0;
+            animator.SetInteger(_comboStackAnimHashID, comboStack);
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -43,9 +43,11 @@ namespace RPG.FSM
             base.OnStateUpdate(animator, stateInfo, layerIndex);
             //Debug.Log($"update ... {stateInfo.normalizedTime}");
 
-            if (stateInfo.normalizedTime >= data.comboDelayRatioList[_comboStack])
+            if (stateInfo.normalizedTime >= data.comboDelayRatioList[comboStack] &&
+                manager.skillCastingDoneFlags[skillID.value] == false)
             {
                 // todo -> 콤보 연계 가능하도록
+                manager.skillCastingDoneFlags[skillID.value] = true;
             }
 
             if (_hasExitTime &&

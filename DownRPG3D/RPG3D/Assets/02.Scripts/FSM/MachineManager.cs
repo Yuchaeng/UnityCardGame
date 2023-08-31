@@ -1,5 +1,8 @@
+using RPG.Controllers;
+using RPG.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RPG.FSM
@@ -25,7 +28,11 @@ namespace RPG.FSM
                                                   _groundCastMaxDistance + 1.0f,
                                                   _groundMask);
 
+        
         public StateType state;
+        public Dictionary<int, Skill> skills;
+        public Dictionary<int, float> skillCoolTimers;
+        public Dictionary<int, bool> skillCastingDoneFlags;
         public bool hasJumped;
         public bool hasSomersaulted;
 
@@ -44,6 +51,36 @@ namespace RPG.FSM
 
         public float horizontal;
         public float vertical;
+
+        public bool UseSkill(int skillID)
+        {
+
+            if (SkillDataRepository.instance.activeSkillDatum.TryGetValue(skillID, out ActiveSkillData data) == false)
+                return false;
+
+            if (skillCoolTimers[skillID] > 0.0f)
+            {
+                //콤보 가능 구간
+                if (skillCastingDoneFlags[skillID] && skills[skillID].comboStack < data.comboStackMax)
+                {
+                    if (ChangeState(data.state))
+                    {
+                        skillCastingDoneFlags[skillID] = false;
+                        return true;
+                    } 
+                }
+                return false;
+            }
+
+            if (ChangeState(data.state))
+            {
+                skillCoolTimers[skillID] = data.coolTime;
+                skillCastingDoneFlags[skillID] = false;
+                return true;
+            }
+
+            return false;
+        }
 
         public bool ChangeState(Animator animator, StateType newState)
         {
@@ -77,10 +114,39 @@ namespace RPG.FSM
             {
                 behaviours[i].Initialize(this);
             }
+
+            Skill[] skillArray = _animator.GetBehaviours<Skill>();
+
+            skills = new Dictionary<int, Skill>();
+            skillCoolTimers = new Dictionary<int, float>();
+            skillCastingDoneFlags = new Dictionary<int, bool>();
+
+            for (int i = 0; i < skillArray.Length; i++)
+            {
+                skills.Add(skillArray[i].skillID.value, skillArray[i]);
+                skillCoolTimers.Add(skillArray[i].skillID.value, 0.0f);
+                skillCastingDoneFlags.Add(skillArray[i].skillID.value, false);
+            }
+
         }
 
         protected virtual void Update()
         {
+            foreach (int skillID in skillCoolTimers.Keys.ToList())
+            {
+                if (skillCoolTimers[skillID] > 0.0f)
+                {
+                    skillCoolTimers[skillID] -= Time.deltaTime;
+                    if (skillCoolTimers[skillID] <= 0.0f)
+                    {
+                        skillCoolTimers[skillID] = 0.0f;
+                        skills[skillID].comboStack = 0;
+                        skillCastingDoneFlags[skillID] = false;
+                    }
+                }
+                    
+            }
+
             move = Quaternion.LookRotation(transform.forward, transform.up) * new Vector3(horizontal, 0.0f, vertical).normalized;
             _animator.SetFloat("horizontal", Vector3.Dot(move * moveGain, transform.right));
             _animator.SetFloat("vertical", Vector3.Dot(move * moveGain, transform.forward));
