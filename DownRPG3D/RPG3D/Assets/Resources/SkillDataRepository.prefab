@@ -46,5 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _activeSkillDatum:
   - {fileID: 11400000, guid: 306695835db2d1a4dbe8a6ce96266f2b, type: 2}
+  - {fileID: 11400000, guid: c9b9dfa8e55297343a7cf13c3b78ac9a, type: 2}
   _PassiveSkillDatum:
   - {fileID: 11400000, guid: 3a2b62af7ca29a34b94012d7c9513efb, type: 2}
