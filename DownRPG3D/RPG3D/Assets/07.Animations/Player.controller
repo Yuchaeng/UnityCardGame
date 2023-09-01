@@ -253,7 +253,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty0
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: state
@@ -384,7 +384,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty1
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: weaponType
@@ -690,7 +690,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty0
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: state
@@ -1105,7 +1105,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty0
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: state
@@ -1205,14 +1205,20 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: isDirty
+  - m_Name: comboStack
+    m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: isDirty0
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: comboStack
-    m_Type: 3
+  - m_Name: isDirty1
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -1889,7 +1895,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty0
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: state
@@ -1962,7 +1968,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty1
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: weaponType
@@ -2166,7 +2172,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty1
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: weaponType
@@ -2247,7 +2253,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isDirty
+    m_ConditionEvent: isDirty0
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: state

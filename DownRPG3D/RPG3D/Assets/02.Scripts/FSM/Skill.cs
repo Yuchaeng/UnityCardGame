@@ -1,6 +1,7 @@
 using RPG.Data;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace RPG.FSM
@@ -38,10 +39,12 @@ namespace RPG.FSM
             animator.SetInteger(_comboStackAnimHashID, comboStack);
         }
 
-        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+
+        public override void OnUpdate(Animator animator, int layerIndex)
         {
-            base.OnStateUpdate(animator, stateInfo, layerIndex);
-            //Debug.Log($"update ... {stateInfo.normalizedTime}");
+            base.OnUpdate(animator, layerIndex);
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
 
             if (stateInfo.normalizedTime >= data.comboDelayRatioList[comboStack] &&
                 manager.skillCastingDoneFlags[skillID.value] == false)
@@ -54,9 +57,9 @@ namespace RPG.FSM
                 stateInfo.normalizedTime >= 1.0f)
             {
                 manager.ChangeState(_destination);
+                animator.SetBool("isDirty1", true);
             }
         }
 
-      
     }
 }

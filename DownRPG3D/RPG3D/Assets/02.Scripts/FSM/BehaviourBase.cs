@@ -21,7 +21,20 @@ namespace RPG.FSM
         {
             base.OnStateMachineEnter(animator, stateMachinePathHash);
 
-            animator.SetBool("isDirty", false);
+            
+        }
+
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            base.OnStateEnter(animator, stateInfo, layerIndex);
+
+            animator.SetBool("isDirty" + layerIndex, false);
+            manager.onUpdate = () => OnUpdate(animator, layerIndex);
+        }
+
+        public virtual void OnUpdate(Animator animator, int layerIndex)
+        {
+
         }
     }
 }

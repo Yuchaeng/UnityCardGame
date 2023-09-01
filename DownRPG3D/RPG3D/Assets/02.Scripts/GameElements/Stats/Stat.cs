@@ -14,6 +14,7 @@ namespace RPG.GameElements.Stats
         DEF,
     }
 
+    [Serializable]
     public class Stat
     {
         public StatType type;
