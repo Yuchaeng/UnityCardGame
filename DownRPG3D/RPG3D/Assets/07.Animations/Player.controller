@@ -1136,7 +1136,7 @@ AnimatorStateMachine:
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 4873639743677097361}
-    m_Position: {x: 290, y: 10, z: 0}
+    m_Position: {x: 300, y: 30, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -2904930782273951148}
     m_Position: {x: 300, y: 120, z: 0}
@@ -1186,43 +1186,43 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 1
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: horizontal
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: vertical
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: state
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: comboStack
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isDirty0
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isDirty1
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -2175,7 +2175,7 @@ AnimatorStateTransition:
     m_ConditionEvent: isDirty1
     m_EventTreshold: 0
   - m_ConditionMode: 6
-    m_ConditionEvent: weaponType
+    m_ConditionEvent: state
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 4873639743677097361}
   m_DstState: {fileID: 0}

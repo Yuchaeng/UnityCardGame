@@ -8,6 +8,7 @@ namespace RPG.GameElements.Stats
 {
     public enum StatType
     {
+        None,
         HPMax,
         MPMax,
         STR,

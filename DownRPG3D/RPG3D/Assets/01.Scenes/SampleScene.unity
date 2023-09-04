@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4603,6 +4603,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa76554059b5bea4f949590d6b9cdb1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats:
+    _list: []
   state: 0
   hasJumped: 0
   hasSomersaulted: 0
@@ -18458,11 +18460,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6449ada72bc25534486980586a5dee69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats:
+    _list:
+    - Key: 1
+      Value:
+        type: 1
+    - Key: 2
+      Value:
+        type: 2
+    - Key: 3
+      Value:
+        type: 3
+    - Key: 4
+      Value:
+        type: 4
   state: 0
   hasJumped: 0
   hasSomersaulted: 0
   move: {x: 0, y: 0, z: 0}
-  moveGain: 0
+  moveGain: 1
   _groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -18504,16 +18520,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _statList:
-  - Key: 0
-    Value: 500
   - Key: 1
-    Value: 100
+    Value: 500
   - Key: 2
-    Value: 10
+    Value: 100
   - Key: 3
+    Value: 50
+  - Key: 4
     Value: 10
   machineManager: {fileID: 0}
-  attackID: {fileID: 11400000, guid: 0bc9ac07bc774f946a0f3282077cb87c, type: 2}
+  attackID: {fileID: 0}
 --- !u!114 &8908651082717457668
 MonoBehaviour:
   m_ObjectHideFlags: 0

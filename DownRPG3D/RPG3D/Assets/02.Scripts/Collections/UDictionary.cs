@@ -16,6 +16,20 @@ namespace RPG.Collections
         [SerializeField] private List<UKeyValuePair<TKey, TValue>> _list;
         private Dictionary<TKey, TValue> _dictionary;
 
+        public UDictionary(IEnumerable<UKeyValuePair<TKey, TValue>> copy)
+        {
+            Initialize(copy);
+        }
+
+        public UDictionary()
+        {
+        }
+
+        public void Initialize(IEnumerable<UKeyValuePair<TKey, TValue>> copy)
+        {
+            _list = new List<UKeyValuePair<TKey, TValue>>(copy);
+        }
+
         public void OnAfterDeserialize()
         {
             
@@ -29,7 +43,7 @@ namespace RPG.Collections
             _dictionary = new Dictionary<TKey, TValue>();
             foreach (var item in _list)
             {
-                _dictionary.Add(item.Key, item.Value);
+                _dictionary.TryAdd(item.Key, item.Value);
             }
         }
     }

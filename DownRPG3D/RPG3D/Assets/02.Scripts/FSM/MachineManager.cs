@@ -264,7 +264,19 @@ namespace RPG.FSM
         {
             throw new NotImplementedException();
         }
-        
+
+
+        private void Reset()
+        {
+            stats = new UDictionary<StatType, Stat>
+            (
+                Enum.GetValues(typeof(StatType))
+                    .Cast<StatType>()
+                    .Where(x => x != StatType.None)
+                    .Select(x => new UKeyValuePair<StatType, Stat>(x, new Stat(x, 0.0f)))
+            );
+        }
+
 
     }
 }
